@@ -126,7 +126,18 @@ public final class Content {
 			"goodsMoney numeri  c(10,4),shouldMoney numeric(10,4),payMoney numeric(10,4),overPlus numeric(10,4),"+
 			"executePrice numeric(10,4),isSpeG text,spPrice numeric(10,4),isVip text,vipPrice numeric(10,4),vipScore numeric(10,4)," +
 			"vipCardNo text,dSellTime text,jsType text,cOperationName text,cOperationNo text,cSaleSheetNo text,isUp text,exactlyTime text)";
-	//,
+	
+	
+	/**
+	 * 消费者表信息
+	 */
+	public static final String TABLR_CONSUMER_NAME = "consumer";
+	/**
+	 * 创建   消费者表
+	 */
+	public static final String CREATE_TABLE_CONSUMER_ENTITY = "create table if not exists t_%s" +
+			"(id integer primary key autoincrement,name text,phone text,address text,sex text)";
+	
 	
 	public static final String CHAR_SET = "GBK";  //编码集
 	
@@ -141,5 +152,4 @@ public final class Content {
 	
 	//服务器   端口：
 	public static final int SERVER_PORT = 6666;//连接端口号
-
 }

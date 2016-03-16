@@ -163,4 +163,13 @@ public final class Configs {
 	public static final int QUERY_ACTIVITY_RESULT_CODE = 34;
 	
 	public static final int QUERY_ACTIVITY_REQUEST_CODE = 36;
+	
+	/**
+	 * 添加    客户信息的回调标识
+	 */
+	public static final int ADD_CONSUMER_INFO_SUCCESS_AUTHORITY = 31;
+	
+	public static final int CONSUMER_INFO_REQUEST_AUTHORITY = 23;
+	
+	public static final int CONSUMER_INFO_RESULT_AUTHORITY = 28;
 }

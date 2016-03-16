@@ -3,6 +3,7 @@ package com.example.hlcloundposproject.db;
 import java.util.ArrayList;
 
 import com.example.hlcloundposproject.Content;
+import com.example.hlcloundposproject.entity.Consumer;
 import com.example.hlcloundposproject.entity.Goods;
 import com.example.hlcloundposproject.entity.JsType;
 import com.example.hlcloundposproject.entity.SpecialGoods;
@@ -335,7 +336,6 @@ public final class OperationDbTableUtils {
 		tempDb.insert("t_"+Content.TABLE_JSTYPE_NAME, null, values);
 	}
 
-	
 	public static void sellGoodsInsertTable(SQLiteDatabase goodsDataDb,String[] payStrs, Goods goods
 			,boolean isVip,String cVipNo,String vipScore,
 			User user,String sheetNo,String jsType,
@@ -442,6 +442,17 @@ public final class OperationDbTableUtils {
 		goods.setPayMoney(cursor.getDouble(cursor.getColumnIndex("goodsMoney")));
 
 		return goods;
+	}
+
+	public static Consumer consumerCursorToEntity(Cursor cursor) {
+		Consumer consumer = new Consumer();
+		
+		consumer.setName(cursor.getString(cursor.getColumnIndex("name")));
+		consumer.setPhone(cursor.getString(cursor.getColumnIndex("phone")));
+		consumer.setAddress(cursor.getString(cursor.getColumnIndex("address")));
+		consumer.setSex(cursor.getString(cursor.getColumnIndex("sex")));
+		
+		return consumer;
 	};
 
 }

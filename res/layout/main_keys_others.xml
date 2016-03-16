@@ -29,24 +29,6 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/main_keys_others_re_print"
-	        style="@style/MainKeysNumsStyle"
-	        android:text="@string/main_others_re_print"
-        />
-        <Button
-             android:id="@+id/main_keys_others_goods_back"
-	        style="@style/MainKeysNumsStyle"
-	        android:text="@string/main_others_goods_back"
-        />
-    </LinearLayout>
-    
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        >
-        <Button
             android:id="@+id/main_keys_others_amount"
 	        style="@style/MainKeysNumsStyle"
 	        android:text="@string/main_others_amount"
@@ -73,6 +55,24 @@
             android:id="@+id/main_keys_go_form"
 	        style="@style/MainKeysNumsStyle"
 	        android:text="@string/main_others_go_form"
+        />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/main_keys_others_re_print"
+	        style="@style/MainKeysNumsStyle"
+	        android:text="@string/main_others_re_print"
+        />
+        <Button
+            android:id="@+id/main_keys_others_consumer_info"
+	        style="@style/MainKeysNumsStyle"
+	        android:text="@string/main_others_consumer_info"
         />
     </LinearLayout>
 

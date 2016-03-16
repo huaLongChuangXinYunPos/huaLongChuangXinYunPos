@@ -47,6 +47,7 @@
         android:layout_marginTop="3dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        
         android:orientation="vertical"
         android:layout_weight="1.3">
        
@@ -74,8 +75,9 @@
 		    android:cacheColorHint="@android:color/transparent"
 		    android:fadingEdge="none"
 		    android:footerDividersEnabled="true"
-		    android:layout_width="fill_parent"
-		    android:layout_height="match_parent" />
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"/>
+		
     </LinearLayout>
     
      <LinearLayout

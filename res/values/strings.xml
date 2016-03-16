@@ -28,7 +28,7 @@
     <string name="main_others_vip">会员</string>
     <string name="main_others_calculate">结算</string>
     <string name="main_others_re_print">重新打印</string>
-    <string name="main_others_goods_back">单品返仓</string>
+    <string name="main_others_consumer_info">客户信息</string>
     <string name="main_others_amount">数量</string>
     <string name="main_others_constume_back">客退</string>
     <string name="main_others_wait_form">挂单</string>
@@ -36,7 +36,7 @@
 
     <!-- f快捷键 -->
     <string name="main_keys_F1">修改密码</string>
-    <string name="main_keys_F2">单品返仓</string>
+    <string name="main_keys_F2">客户信息</string>
     <string name="main_keys_F3">客退</string>
     <string name="main_keys_F4">数量</string>
     <string name="main_keys_F5">结算</string>
@@ -75,5 +75,6 @@
     <string name="vip_fragment_input_vipnum">请输入 vip卡号</string>
     <string name="constum_back_fragment_input_sellerNum">请输入商品单号</string>
     <string name="title_activity_query_goods">QueryGoodsActivity</string>
+    <string name="title_activity_consumer_info">ConsumerInfoActivity</string>
 
 </resources>

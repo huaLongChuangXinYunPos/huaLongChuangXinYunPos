@@ -11,19 +11,20 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/main_keysF1"
+             android:id="@+id/main_keysF5"
 	        style="@style/MainKeysNumsStyle"
-	        android:text="@string/main_keys_F1"
+	        android:text="@string/main_keys_F5"
+        />
+        
+         <Button
+             android:id="@+id/main_keysF7"
+	        style="@style/MainKeysNumsStyle"
+	        android:text="@string/main_keys_F7"
         />
         <Button
             android:id="@+id/main_keysF2"
 	        style="@style/MainKeysNumsStyle"
 	        android:text="@string/main_keys_F2"
-        />
-        <Button
-            android:id="@+id/main_keysF3"
-	        style="@style/MainKeysNumsStyle"
-	        android:text="@string/main_keys_F3"
         />
     </LinearLayout>
     
@@ -39,9 +40,9 @@
 	        android:text="@string/main_keys_F4"
         />
         <Button
-             android:id="@+id/main_keysF5"
+            android:id="@+id/main_keysF3"
 	        style="@style/MainKeysNumsStyle"
-	        android:text="@string/main_keys_F5"
+	        android:text="@string/main_keys_F3"
         />
         <Button
              android:id="@+id/main_keysF6"
@@ -57,11 +58,6 @@
         android:orientation="horizontal"
         >
         <Button
-             android:id="@+id/main_keysF7"
-	        style="@style/MainKeysNumsStyle"
-	        android:text="@string/main_keys_F7"
-        />
-        <Button
              android:id="@+id/main_keysF8"
 	        style="@style/MainKeysNumsStyle"
 	        android:text="@string/main_keys_F8"
@@ -71,6 +67,12 @@
 	        style="@style/MainKeysNumsStyle"
 	        android:text="@string/main_keys_F9"
         />
+       
+        <Button
+            android:id="@+id/main_keysF1"
+	        style="@style/MainKeysNumsStyle"
+	        android:text="@string/main_keys_F1"
+        	/>
     </LinearLayout>
     
     <LinearLayout
@@ -79,20 +81,17 @@
         android:layout_weight="1"
         android:orientation="horizontal"
         >
+        
         <Button
-             android:id="@+id/main_keysF10"
-	        style="@style/MainKeysNumsStyle"
-	        android:text="@string/main_keys_F10"
-        />
-        <Button
-             android:id="@+id/main_keysF11"
+            android:id="@+id/main_keysF11"
 	        style="@style/MainKeysNumsStyle"
 	        android:text="@string/main_keys_F11"
-        />
+        	/>
+         
         <Button
-             android:id="@+id/main_keysF12"
+            android:id="@+id/main_keysF12"
 	        style="@style/MainKeysNumsStyle"
 	        android:text="@string/main_keys_F12"
-        />
+       		/>
     </LinearLayout>
 </LinearLayout>

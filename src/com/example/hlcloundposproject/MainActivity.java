@@ -16,11 +16,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.hlcloundposproject.R;
+import com.example.hlcloundposproject.activity.ConsumerInfoActivity;
 import com.example.hlcloundposproject.activity.LoginActivity;
 import com.example.hlcloundposproject.activity.QueryGoodsActivity;
 import com.example.hlcloundposproject.adapter.GoodsAdapter;
 import com.example.hlcloundposproject.db.MyOpenHelper;
 import com.example.hlcloundposproject.db.OperationDbTableUtils;
+import com.example.hlcloundposproject.entity.Consumer;
 import com.example.hlcloundposproject.entity.Goods;
 import com.example.hlcloundposproject.entity.SpecialGoods;
 import com.example.hlcloundposproject.entity.User;
@@ -143,8 +145,8 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 	private Button calcute;
 	@ViewInject(R.id.main_keys_others_re_print)
 	private Button rePrint;
-	@ViewInject(R.id.main_keys_others_goods_back)
-	private Button goodBack;
+	@ViewInject(R.id.main_keys_others_consumer_info)
+	private Button consumerInfo;
 	@ViewInject(R.id.main_keys_others_amount)
 	private Button amount;
 	@ViewInject(R.id.main_keys_others_constume_back)
@@ -186,8 +188,10 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 	private Button btnf8;
 	@ViewInject(R.id.main_keysF9)
 	private Button btnf9;
-	@ViewInject(R.id.main_keysF10)
-	private Button btnf10;
+	
+//	@ViewInject(R.id.main_keysF10)
+//	private Button btnf10;
+	
 	@ViewInject(R.id.main_keysF11)
 	private Button btnf11;
 	@ViewInject(R.id.main_keysF12)
@@ -418,13 +422,6 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 			priceDiscount = getFormatFloat(spSum + "").floatValue()
 					+getFormatFloat(vipSum + "").floatValue();
 			
-			if(!isLine){
-				View view = new View(MainActivity.this);
-				view.setMinimumHeight(2);
-				view.setMinimumWidth(LayoutParams.MATCH_PARENT);
-				tableListView.addFooterView(view);
-				isLine = true;
-			}
 		}
 		/**
 		 * 当 Adpater 调用 notifyDataSetInvalidate() 时候回调
@@ -434,7 +431,6 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 		}
 	};
 	
-	private boolean isLine = false;	
 
 	public BigDecimal getFormatFloat(String floatNum){
 		BigDecimal bd = new BigDecimal(floatNum);
@@ -466,7 +462,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 		vip.setOnClickListener(this);
 		calcute.setOnClickListener(this);
 		rePrint.setOnClickListener(this);
-		goodBack.setOnClickListener(this);
+		consumerInfo.setOnClickListener(this);
 		amount.setOnClickListener(this);
 		constumeBack.setOnClickListener(this);
 		waitForm.setOnClickListener(this);
@@ -481,7 +477,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 		btnf7.setOnClickListener(this);
 		btnf8.setOnClickListener(this);
 		btnf9.setOnClickListener(this);
-		btnf10.setOnClickListener(this);
+//		btnf10.setOnClickListener(this);
 		btnf11.setOnClickListener(this);
 		btnf12.setOnClickListener(this);
 	}
@@ -494,10 +490,8 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 		switch (v.getId()) {
 		
 		case R.id.query_goods_btn:  //模糊查询   商品信息
-			
 			Intent in = new Intent(this,QueryGoodsActivity.class);
 			startActivityForResult(in, Configs.QUERY_ACTIVITY_REQUEST_CODE);
-			
 			break;
 		
 		case R.id.ic_scan:
@@ -649,26 +643,10 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 				Toast.makeText(this, "当前无商品可以打印", Toast.LENGTH_SHORT).show();
 			}
 			break;
-		case R.id.main_keysF2:// 单品返仓
-		case R.id.main_keys_others_goods_back:
-			if (clickItem) {
-				if (list.size() == 0) {
-					Toast.makeText(this, "当前无可返仓数据", 0).show();
-				} else {
-					// 将 商品 数量 减一
-					float amount = list.get(listViewCurrCilckPosition)
-							.getAmount();
-					if (amount == 1) {
-						list.remove(list.get(listViewCurrCilckPosition));
-					} else {
-						list.get(listViewCurrCilckPosition).setAmount(
-								amount - 1);
-					}
-					adapter.notifyDataSetChanged();
-				}
-			} else {
-				Toast.makeText(this, "当前未选中任何项", 0).show();
-			}
+		case R.id.main_keysF2:// 输入用户信息：
+		case R.id.main_keys_others_consumer_info:
+			Intent inte = new Intent(this,ConsumerInfoActivity.class);
+			startActivityForResult(inte,Configs.CONSUMER_INFO_REQUEST_AUTHORITY);
 			break;
 		case R.id.main_keysF4:// 数量
 		case R.id.main_keys_others_amount:
@@ -740,12 +718,10 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					"updateUserPasswordDialog");
 			break;
 		case R.id.main_keysF7:// 开钱箱
-
 			break;
 			
-		case R.id.main_keysF10:// 条码秤
-			
-			break;
+//		case R.id.main_keysF10:// 条码秤
+//			break;
 
 		// 更新数据库
 		case R.id.main_keysF11:
@@ -825,7 +801,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 		
 		m_printer.PrintLineInit(24);
 		m_printer.PrintLineString("商品名/编码", 24, PrintType.Left, false);
-		m_printer.PrintLineString("  单价   *数量",  24, PrintType.Centering, false);
+		m_printer.PrintLineString("       单价   *数量",  24, PrintType.Centering, false);
 		m_printer.PrintLineString("小计    ", 24, PrintType.Right, false);
 		m_printer.PrintLineEnd();
 		
@@ -843,8 +819,8 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 			m_printer.PrintLineEnd();
 			
 			m_printer.PrintLineInit(22);
-			m_printer.PrintLineString("  "+goods.getcBarcode()+"-",22, PrintType.Left, false);
-			m_printer.PrintLineString("       "+goods.getfNormalPrice()+" *"+goods.getAmount(), 22, PrintType.Centering, false);
+			m_printer.PrintLineString("  "+goods.getcBarcode(),22, PrintType.Left, false);
+			m_printer.PrintLineString("             "+goods.getfNormalPrice()+" *"+goods.getAmount(), 22, PrintType.Centering, false);
 			m_printer.PrintLineString(goods.getPayMoney()+"  ", 22, PrintType.Right, false);
 			m_printer.PrintLineEnd();
 		}
@@ -926,6 +902,46 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 		m_printer.PrintLineInit(22);
 		m_printer.PrintLineString("服务台总联系电话:18513667437" ,22,PrintType.Left,false);
 		m_printer.PrintLineEnd();
+		
+		
+		if(isAddConsumerInfo){
+			m_printer.PrintLineInit(18);
+			m_printer.PrintLineString("-------------------------------------------------", 18,
+					PrintType.Centering, true);
+			m_printer.PrintLineEnd();
+			
+			m_printer.PrintLineInit(22);
+			m_printer.PrintLineString("客户信息" , 22,PrintType.Centering,false);
+			m_printer.PrintLineEnd();
+			
+			m_printer.PrintLineInit(18);
+			m_printer.PrintLineString("-------------------------------------------------", 18,
+					PrintType.Centering, true);
+			m_printer.PrintLineEnd();
+			
+			m_printer.PrintLineInit(22);
+			m_printer.PrintLineString("姓名:"+consumer.getName(), 22,PrintType.Left,false);
+			m_printer.PrintLineEnd();
+			
+			m_printer.PrintLineInit(22);
+			m_printer.PrintLineString("电话:" + consumer.getPhone(), 22,PrintType.Left,false);
+			m_printer.PrintLineEnd();
+			
+			m_printer.PrintLineInit(22);
+			m_printer.PrintLineString("送达地址:", 22,PrintType.Left,false);
+			m_printer.PrintLineEnd();
+			
+			m_printer.PrintLineInit(22);
+			m_printer.PrintLineString(consumer.getAddress(), 22,PrintType.Left,false);
+			m_printer.PrintLineEnd();
+			
+			m_printer.PrintLineInit(18);
+			m_printer.PrintLineString("-------------------------------------------------", 18,
+					PrintType.Centering, true);
+			m_printer.PrintLineEnd();
+			
+			isAddConsumerInfo = false;
+		}
 		
 		m_printer.PrintLineInit(100);
 		m_printer.PrintLineString("", 100,PrintType.Centering, true);
@@ -1142,7 +1158,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 
 		case Configs.SELECT_TEMP_FRAGMENT_AUTHORITY:// 用户 选择挂单表的 回退SelectFormTempFragment
 			/**
-			 * 获取到 用户点击 表 对表进行操作：
+			 * 获取到   用户点击表    对表进行操作：
 			 */
 			SQLiteDatabase tempdb = tempDatahelper.getReadableDatabase();
 			selectTempOneTableDataToShow(tempdb,
@@ -1558,12 +1574,27 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 						}
 					}
 					break;
+					
+					case Configs.CONSUMER_INFO_REQUEST_AUTHORITY:{
+						if(resultCode ==Configs.CONSUMER_INFO_RESULT_AUTHORITY){
+							consumer = (Consumer) data.getExtras().getSerializable("consumer");
+							//获取到      客户信息
+							isAddConsumerInfo = true;
+							Toast.makeText(this, "客户信息添加成功", 1).show();
+							System.out.println(consumer.toString());
+						}
+					}
+					break;
 				default:
 					break;
 				}
 			}
 		}
 	}
+
+	private static Consumer consumer;
+	
+	private static boolean isAddConsumerInfo = false;
 
 	@Override
 	protected void onDestroy() {
