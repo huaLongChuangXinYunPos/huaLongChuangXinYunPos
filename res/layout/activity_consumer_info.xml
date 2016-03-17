@@ -1,0 +1,80 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ConsumerInfoActivity" >
+
+   <RelativeLayout
+	      android:id="@+id/title"
+	      android:paddingLeft="3dp"
+	      android:layout_width="match_parent"
+	      android:layout_height="45dp"
+	      android:background="@color/highBlue" >
+	      
+	        <ImageView
+	             android:id="@+id/ic_back"
+	             android:layout_width="wrap_content"
+	             android:layout_height="wrap_content"
+	             android:layout_centerVertical="true"
+	             android:focusable="false"
+	             android:clickable="true"
+	             android:background="@drawable/query_activity_back_selector"
+	            />
+
+            <TextView
+	            android:id="@+id/tv_titles"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerVertical="true"
+	            android:layout_toRightOf="@id/ic_back"
+	            android:layout_marginLeft="5dp"
+	            android:text="添加打印客户"
+	            android:textColor="#000000"
+	            android:textSize="20sp"
+	            />
+            
+            <ImageView 
+				android:id="@+id/add_consumer_info"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerVertical="true"
+	            android:layout_alignParentRight="true"
+	            android:focusable="false"
+	            android:clickable="true"
+	            android:layout_marginRight="5dp"
+	            android:background="@drawable/consumer_add_selector"
+                />
+	</RelativeLayout>
+	
+     <LinearLayout 
+	     android:layout_width="match_parent"
+	     android:layout_height="0dp"
+	     android:layout_weight="1"
+	     android:orientation="vertical"
+      	 >   
+	     <TextView 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:text="当前客户信息:"
+		    android:textSize="18sp"
+		    android:padding="2dp"
+		    android:background="@color/lowGray"
+		    />
+	     
+	     <View   
+		     android:layout_width="match_parent"  
+		     android:layout_height="1dip"  
+		     android:background="@color/lowRed"/> 
+	       
+	       <ListView 
+		      android:id="@+id/query_goods_select"
+		      android:layout_width="match_parent"
+		      android:layout_height="match_parent"
+		      android:padding="2dp"
+		      android:divider="@color/lowRed"
+		      android:footerDividersEnabled="true"
+		      android:dividerHeight="1.0dip"
+		      />
+   		</LinearLayout>
+</LinearLayout>

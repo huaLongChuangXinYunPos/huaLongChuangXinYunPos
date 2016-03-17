@@ -1,0 +1,213 @@
+
+//主机地址
+//http://192.168.3.199:1234/AppServer/
+
+//1,http://192.168.3.199:1234/AppServer/GetPosID.aspx?action=RQPOS&AppCode=%s
+//根据当前pos机的硬件标识,获取当前POS机在服务器的代号：
+{"resultStatus":1,
+	"data":[
+			{
+				"posid":"09"
+			}
+		]
+}
+
+//2,http://192.168.3.199:1234/AppServer/GetJsType.aspx?action=RQJSTYPR
+//获取所有  服务器传来的结算方式：  保存到本地数据库
+{"resultStatus":1,
+	"data":[
+			{
+				"jstype":"1人民币",
+				"mianzhi":0.0000,
+				"zhekou":100.0000,
+				"shishou":0.0000,
+				"zhaoling":0.0000,
+				"detail":"人民币"
+			},
+			{
+				"jstype":"2银联卡",
+				"mianzhi":0.0000,
+				"zhekou":100.0000,
+				"shishou":0.0000,
+				"zhaoling":0.0000,
+				"detail":"银联卡"
+			}
+			...
+		]
+}
+
+//3,http://192.168.3.199:1234/AppServer/GetUserInf.aspx?action=RQAll   
+//获取所有收银员的用户   信息      保存到本地数据库
+{"resultStatus":1,
+	"data":[
+			{	
+				"Pass":"000",
+				"Name":"打价签",
+				"User":"000",
+				"Right":null,
+				"Ki":null,
+				"quanxian":"YNNNNNN",
+				"userType":"价签"
+			}
+			...
+		]
+} 
+
+//4,http://192.168.3.199:1234/AppServer/GetPloyOfSale.aspx?action=RQPloy
+//获取  所有特价商品的    特价信息     保存到本地数据库
+{"resultStatus":1,
+	"data":[
+		{	
+			"fVipValue":"0.0000",
+			"cPloyNo":"20151020联营",
+			"cGoodsNo":"211642",
+			"cGoodsName":"爱利地千层酥135g",
+			"fQuantity_Ploy":"1.0000",
+			"fPrice_SO":"15.8000",
+			"dDateStart":"2016-01-01",
+			"cTimeStart":"13:52:10 ",
+			"dDateEnd":"2016-06-03",
+			"cTimeEnd":"13:52:10 ",
+			"iPriority":"1",
+			"bSO":"1",
+			"bPresent":"0",
+			"cPresentPloyNo":"",
+			"cPloyTypeNo":"8004",
+			"cPloyTypeName":"海报特价",
+			"bEnabled":"1",
+			"bLimitQty":"0",
+			"fLimitQty":"",
+			"week":{
+					"week1":1,"week2":1,"week3":1,"week4":1,"week5":1,"week6":1,"week7":1
+					},
+			"hour":{"hour0":1,"hour1":1,"hour2":1,"hour3":1,"hour4":1,"hour5":1,"hour6":1,"hour7":1,"hour8":1,
+					"hour9":1,"hour10":1,"hour11":1,"hour12":1,"hour13":1,"hour14":1,"hour15":1,"hour16":1,"hour17":1,
+					"hour18":1,"hour19":1,"hour20":1,"hour21":1,"hour22":1,"hour23":1
+					},
+			"bJiOu":"0",
+			"fQty_Ji":"",
+			"fPrice_ji":"",
+			"fQty_Ou":"",
+			"fPrice_Ou":"",
+			"fRatio_JiOu":""
+		}
+		...
+	]
+}
+
+//5,http://192.168.3.199:1234/AppServer/GetGoodsList.aspx?action=RQPOS
+//获取   所有商品的基本信息   保存到本地数据库
+{"resultStatus":1,
+	"data":[
+		{
+			"cGoodsNo":"02",
+			"cUnitedNo":"02",
+			"cGoodsName":"小袋子",
+			"cBarcode":"02",
+			"cUnit":"个",
+			"cSpec":"",
+			"fNormalPrice":0.2000,
+			"fVipPrice":0.2000,
+			"fVipScore":0.2000,
+			"bWeight":0,
+			"fVipScore_base":0.2000,
+			"fVipPrice_student":0.2000,
+			"bHidePrice":0,
+			"bHideQty":0,
+			"bNoVipPrice":0,
+			"bUpdate":0
+		}
+		...
+	]
+}
+	
+//6,http://192.168.3.199:1234/AppServer/GetGoodsList.aspx?action=RQVIP
+//获取     所有vip特价信息      保存到本地数据库
+{"resultStatus":1,
+	"data":[
+		{
+			"cSheetno":"VIP2015-000010",
+			"iLineNo":"1",
+			"cGoodsNo":"214554",
+			"cBarcode":"6956367338680",
+			"fVipPrice":"42.0000",
+			"fVipPrice_student":"42.0000",
+			"week":{
+				"week1":0,"week2":0,"week3":0,"week4":0,"week5":0,"week6":0,"week7":0
+				},
+			"hour":{
+				"hour0":0,"hour1":0,"hour2":0,"hour3":0,"hour4":0,"hour5":0,"hour6":0,"hour7":0,
+				"hour8":0,"hour9":0,"hour10":0,"hour11":0,"hour12":0,"hour13":0,"hour14":0,"hour15":0,
+				"hour16":0,"hour17":0,"hour18":0,"hour19":0,"hour20":0,"hour21":0,"hour22":0,"hour23":0
+			},
+			"bLimitQty":"",
+			"fLimitQty":"2.0000",
+			"fShiDuanQty":"42.0000",
+			"fVipValue":"42.0000"
+		}
+		...
+	]
+}
+
+
+//7,http://192.168.3.199:1234/AppServer/GetUserInf.aspx?action=RQONE&userName=000
+//到服务器      查找当前登录     用户是否存在   否则resultStatus = 0
+{"resultStatus":1,
+	"data":[
+			{	
+				"Pass":"000",
+				"Name":"打价签",
+				"User":"000",
+				"Right":null,
+				"Ki":null,
+				"quanxian":"YNNNNNN",
+				"userType":"价签"
+			}
+			...
+		]
+}
+
+
+//8,http://192.168.3.199:1234/AppServer/GetGoodsList.aspx?action=RQONE&cBarcode=02
+//根据    条码查询当前  商品信息是否存在    从服务器查询      
+{"resultStatus":1,
+	"data":[
+		{
+			"cGoodsNo":"02",
+			"cUnitedNo":"02",
+			"cGoodsName":"小袋子",
+			"cBarcode":"02",
+			"cUnit":"个",
+			"cSpec":"",
+			"fNormalPrice":0.2000,
+			"fVipPrice":0.2000,
+			"fVipScore":0.2000,
+			"bWeight":0,
+			"fVipScore_base":0.2000,
+			"fVipPrice_student":0.2000,
+			"bHidePrice":0,
+			"bHideQty":0,
+			"bNoVipPrice":0,
+			"bUpdate":0
+		}
+	]
+}
+
+
+//9,http://192.168.3.199:1234/AppServer/GetUserInf.aspx?action=RQUPDATE&userName=%s&newPass=%s
+//修改    收银员的     用户名和密码   根据   新的  用户名和 密码
+
+
+//10,http://192.168.3.199:1234/AppServer/GetVip.aspx?action=RQVIP&vipNo=%s
+//根据  vip卡号   查询vip用户的     基本信息   和积分 
+
+
+//11,http://192.168.3.199:1234/AppServer/GetVip.aspx?action=RQSCO&vipNo=%s&fValue=%s
+//将   vip用户的   新的积分信息发送至服务器
+
+
+
+
+
+
+

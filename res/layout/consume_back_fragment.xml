@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="2dp"
+    android:paddingBottom="15dp"
+    android:paddingRight="2dp"
+    android:paddingTop="2dp"
+    android:background="@color/loginbg"
+    android:orientation="vertical" >
+    
+     <LinearLayout  
+        android:layout_width="match_parent"  
+        android:layout_height="wrap_content"  
+        android:orientation="horizontal"   
+        android:padding="3dp"
+        android:layout_gravity="center">  
+      
+        <ImageView  
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"  
+            android:background="@drawable/logo"  
+            />  
+        <TextView   
+            android:id="@+id/pay_fragment_money"
+            android:layout_width="wrap_content"  
+            android:layout_height="wrap_content"  
+            android:text="购买查询"  
+            android:textSize="18dp"
+            android:paddingLeft="5dp"  
+            android:textColor="@color/red"  
+            android:layout_gravity="center"  
+            />  
+    </LinearLayout>  
+      
+     <View   
+            android:layout_width="match_parent"  
+            android:layout_height="2dip"  
+            android:background="@color/highBlue"/>
+     
+     <LinearLayout 
+             android:layout_width="match_parent"
+   			 android:layout_height="wrap_content"
+   			 android:orientation="vertical"
+   			 android:padding="5dp"
+         >
+       	<EditText
+	        android:id="@+id/constume_back_fragment_inputEt"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="15dp"
+	        android:inputType="numberDecimal"
+	        android:layout_marginBottom="10dp"
+	        />
+    
+	    <LinearLayout 
+	        android:layout_marginTop="10dp"
+	        android:layout_width="match_parent"
+	        android:gravity="right"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal">
+	    
+		    <Button 
+		        android:id="@+id/constum_back_fragment_sure"
+		        style="@style/LoginBtnStyle"
+		        android:text="@string/update_password_fragment_sureupdate"
+		        />
+		    <Button
+		        android:id="@+id/constum_back_fragment_exit"
+		        style="@style/LoginBtnStyle"
+		        android:text="@string/update_password_fragment_exitupdate"
+		        />
+		</LinearLayout>
+     </LinearLayout>
+</LinearLayout>

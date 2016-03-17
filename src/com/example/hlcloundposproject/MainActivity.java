@@ -431,7 +431,6 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 		}
 	};
 	
-
 	public BigDecimal getFormatFloat(String floatNum){
 		BigDecimal bd = new BigDecimal(floatNum);
 		bd = bd.setScale(4,BigDecimal.ROUND_HALF_UP);  
@@ -1644,4 +1643,5 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 	}
 	
 	private static final int SCAN_PAY_THREAD_IS_FAIL = 19;//É¨ÂëÖ§¸¶Ê§°Ü
+
 }
