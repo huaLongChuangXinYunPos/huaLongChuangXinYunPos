@@ -30,7 +30,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.hlcloundposproject.R;
+import com.mall.hlcloundposproject.R;
 import com.google.zxing.ResultPoint;
 import com.mining.app.zxing.camera.CameraManager;
 

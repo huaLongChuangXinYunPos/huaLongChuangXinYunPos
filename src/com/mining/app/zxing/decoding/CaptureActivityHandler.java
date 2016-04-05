@@ -27,7 +27,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.example.hlcloundposproject.R;
+import com.mall.hlcloundposproject.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.mining.app.zxing.MipcaActivityCapture;
