@@ -266,20 +266,14 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					
 					Toast.makeText(MainActivity.this, "正在打印售货单,请稍等...", 1).show();
 					
-					new Thread(new Runnable(){
-	
-						@Override
-						public void run() {
-							printSellForm();
-						}
-						
-					}).start();
+					printSellForm();
+					
 					break;
 				}
 				
 				case SCAN_PAY_THREAD_IS_FAIL:{  //扫码支付失败
 					MyProgressDialog.stopProgress();
-					Toast.makeText(MainActivity.this, "支付失败,请判断当前网络", 1).show();
+					Toast.makeText(MainActivity.this, "支付失败", 1).show();
 				}
 				
 				default:
@@ -1168,120 +1162,136 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 	 */
 	@Override
 	public void fragmentCallback(String result, int fragmentAuthority) {
-
-		switch (fragmentAuthority) {
-
-		case Configs.SELECT_TEMP_FRAGMENT_AUTHORITY:// 用户 选择挂单表的 回退SelectFormTempFragment
-			/**
-			 * 获取到   用户点击表    对表进行操作：
-			 */
-			SQLiteDatabase tempdb = tempDatahelper.getReadableDatabase();
-			selectTempOneTableDataToShow(tempdb,
-					result.substring(0, result.length()));
-
-			break;
-
-		case Configs.UPDATE_FRAGMENT_AMOUNT: // 更新 单个 商品数量 UpdateAmountFragment
-			// 获取 Vip信息 遍历数据集合： 将商品数量 修改为 输入数量：
-			if (Float.parseFloat(result) <= 0) {
-				list.remove(listViewCurrCilckPosition);
-			} else {
-				list.get(listViewCurrCilckPosition).setAmount(
-						Float.parseFloat(result));
-			}
-			adapter.notifyDataSetChanged();
-			break;
-
-		case Configs.CONSUME_BACK_FRAGMENT_AUTHORITY: // 客退fragment单号的 backFragment的回调
-
-			//根据客退单号      查询商品信息：
-			goodsDataDb = goodsDataHelper.getReadableDatabase();
-			Cursor cursor  = goodsDataDb.query("t_"+Content.TABLE_SELL_FORM,
-					new String[]{"*"}, " cSaleSheetNo='"+result+"'", 
-					null, null, null, null);
+		
+		if(result!=null){
+			switch (fragmentAuthority) {
 			
-			if(cursor.moveToFirst()){
-				list.clear();
-				for(cursor.moveToFirst();!cursor.isAfterLast();cursor.moveToNext()){
-					String cBarcode = cursor.getString(cursor.getColumnIndex("cBarCode"));
-					Cursor cur = OperationDbTableUtils.selectDataFromLocal(
-							cBarcode,goodsDataHelper);
-					Goods goo = OperationDbTableUtils.goodsCursorToEntity(cur);
-					Goods good = OperationDbTableUtils.sellGoodsToGoodsEntity(cursor,goo);
-					list.add(good);
+			case Configs.SELECT_TEMP_FRAGMENT_AUTHORITY:// 用户 选择挂单表的 回退SelectFormTempFragment
+				/**
+				 * 获取到   用户点击表    对表进行操作：
+				 */
+				SQLiteDatabase tempdb = tempDatahelper.getReadableDatabase();
+				selectTempOneTableDataToShow(tempdb,
+						result.substring(0, result.length()));
+				
+				break;
+				
+			case Configs.UPDATE_FRAGMENT_AMOUNT: // 更新 单个 商品数量 UpdateAmountFragment
+				// 获取 Vip信息 遍历数据集合： 将商品数量 修改为 输入数量：
+				if (Float.parseFloat(result) <= 0) {
+					list.remove(listViewCurrCilckPosition);
+				} else {
+					list.get(listViewCurrCilckPosition).setAmount(
+							Float.parseFloat(result));
 				}
+				adapter.notifyDataSetChanged();
+				break;
+				
+			case Configs.CONSUME_BACK_FRAGMENT_AUTHORITY: // 客退fragment单号的 backFragment的回调
+				
+				//根据客退单号      查询商品信息：
+				goodsDataDb = goodsDataHelper.getReadableDatabase();
+				Cursor cursor  = goodsDataDb.query("t_"+Content.TABLE_SELL_FORM,
+						new String[]{"*"}, " cSaleSheetNo='"+result+"'", 
+						null, null, null, null);
+				
+				if(cursor.moveToFirst()){
+					list.clear();
+					for(cursor.moveToFirst();!cursor.isAfterLast();cursor.moveToNext()){
+						String cBarcode = cursor.getString(cursor.getColumnIndex("cBarCode"));
+						Cursor cur = OperationDbTableUtils.selectDataFromLocal(
+								cBarcode,goodsDataHelper);
+						Goods goo = OperationDbTableUtils.goodsCursorToEntity(cur);
+						Goods good = OperationDbTableUtils.sellGoodsToGoodsEntity(cursor,goo);
+						list.add(good);
+					}
+					goodsDataDb = goodsDataHelper.getWritableDatabase();
+					goodsDataDb.delete("t_"+Content.TABLE_SELL_FORM,
+							" cSaleSheetNo = '"+ result +"'", null);
+				}else{
+					Toast.makeText(this, "当前单号不存在", 1).show();
+				}
+				adapter.notifyDataSetChanged();
+				break;
+				
+			case Configs.VIP_FRAGMENT_QUHORITY: // Vip 根据vip卡号查询 得到 会员信息的VipFragment
+				JSONObject object = JSON.parseObject(result);
+				JSONArray array = object.getJSONArray("data");
+				JSONObject obj = array.getJSONObject(0);
+				cVipNo = obj.getString("cVipno");
+				fCurValue = obj.getFloatValue("fCurValue");
+				vipInput = true; // 记录当前 消费者 为 VIP用户
+				adapter.notifyDataSetChanged();
+				break;
+				
+			case Configs.GET_CALCULATE_WAY_AUTHORITY: // 获得到 结算方式 信息 获取结算方式进行处理：
+				// 输出  结算方式 ：
+				if (payWaylist.get(Integer.parseInt(result)).equals("人民币")) {
+					float payMoney = Float.parseFloat(totalMoney.getText()
+							.toString().trim());
+					PayBalanceFragmentDialog fragment = PayBalanceFragmentDialog
+							.getInstance(payMoney+"-"+"人民币");
+					fragment.show(getSupportFragmentManager(), "payBalance");
+				} else if (payWaylist.get(Integer.parseInt(result)).equals("微信")) {
+					
+					updateSaleSheetNo();  //更新销售数量和     获取单号
+					jsWay = "微信";
+					consumePayMoney = totalMoney.getText().toString().trim();
+					overPlus = "0.00";
+					
+					Intent intent = new Intent();
+					intent.setClass(MainActivity.this, MipcaActivityCapture.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivityForResult(intent, Configs.SCANNIN_WE_CHAT_REQUEST_CODE);
+				} else if(payWaylist.get(Integer.parseInt(result)).equals("支付宝")){
+					
+					updateSaleSheetNo();  //更新销售数量和     获取单号
+					jsWay = "支付宝";
+					consumePayMoney = totalMoney.getText().toString().trim();
+					overPlus = "0.00";
+					
+					Intent intent = new Intent();
+					intent.setClass(MainActivity.this, MipcaActivityCapture.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivityForResult(intent, Configs.SCANNIN_ALI_REQUEST_CODE);
+				}else{
+					Toast.makeText(this, "当前版本未集成该支付方式", 1).show();
+				}
+				break;
+				
+			case Configs.GET_PAY_CALCULATE_RESULT_AUTHORITY:
+				// 结算结果       的 fragment的       回调            并记录销售情况       清空list中数据
+				String[] payStrs = result.split("-");//获取支付方式 
 				goodsDataDb = goodsDataHelper.getWritableDatabase();
-				goodsDataDb.delete("t_"+Content.TABLE_SELL_FORM,
-						" cSaleSheetNo = '"+ result +"'", null);
-			}else{
-				Toast.makeText(this, "当前单号不存在", 1).show();
+				
+				jsWay = "人民币";
+				shPayMoney = payStrs[0];//记录  应该支付的金额
+				consumePayMoney = payStrs[1]; //记录   用户支付总金额
+				overPlus = payStrs[2]; //记录用户    应该找零的金额
+				updateSaleSheetNo();  //更新   销售数量和     获取单号
+				
+				//支付,成功    向    main 发送信息    更新ui:
+				Message msg = Message.obtain(); 
+				msg.what = SCAN_PAY_THREAD_IS_OK;
+				msg.obj = result;
+				handler.sendMessage(msg);
+				
+				if(vipInput){// 当前为    vip用户
+					//将  vip 用户信息  发送至服务器：
+					new VolleyUtils(this).getVolleyDataInfo(
+							String.format(Configs.SERVER_BASE_URL+Configs.UPDATE_VIP_SCORE,cVipNo,vipScore+fCurValue+""),
+							this,UPDATE_VIP_SCRORE_AUTHORITY);
+				}
+				break;
+				
+			case QUERY_GOODS_FRAGMENT_AUTHORITY://查询商品信息的   fragment
+				break;
+			default:
+				break;
 			}
-			adapter.notifyDataSetChanged();
-			break;
-
-		case Configs.VIP_FRAGMENT_QUHORITY: // Vip 根据vip卡号查询 得到 会员信息的VipFragment
-			JSONObject object = JSON.parseObject(result);
-			JSONArray array = object.getJSONArray("data");
-			JSONObject obj = array.getJSONObject(0);
-			cVipNo = obj.getString("cVipno");
-			fCurValue = obj.getFloatValue("fCurValue");
-			vipInput = true; // 记录当前 消费者 为 VIP用户
-			adapter.notifyDataSetChanged();
-			break;
-
-		case Configs.GET_CALCULATE_WAY_AUTHORITY: // 获得到 结算方式 信息 获取结算方式进行处理：
-			// 输出  结算方式 ：
-			if (payWaylist.get(Integer.parseInt(result)).equals("人民币")) {
-				float payMoney = Float.parseFloat(totalMoney.getText()
-						.toString().trim());
-				PayBalanceFragmentDialog fragment = PayBalanceFragmentDialog
-						.getInstance(payMoney+"-"+"人民币");
-				fragment.show(getSupportFragmentManager(), "payBalance");
-			} else if (payWaylist.get(Integer.parseInt(result)).equals("微信")) {
-				Intent intent = new Intent();
-				intent.setClass(MainActivity.this, MipcaActivityCapture.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivityForResult(intent, Configs.SCANNIN_WE_CHAT_REQUEST_CODE);
-			} else if(payWaylist.get(Integer.parseInt(result)).equals("支付宝")){
-				Intent intent = new Intent();
-				intent.setClass(MainActivity.this, MipcaActivityCapture.class);
-				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivityForResult(intent, Configs.SCANNIN_ALI_REQUEST_CODE);
-			}else{
-				Toast.makeText(this, "当前版本未集成该支付方式", 1).show();
-			}
-			break;
-
-		case Configs.GET_PAY_CALCULATE_RESULT_AUTHORITY:
-			// 结算结果       的 fragment的       回调            并记录销售情况       清空list中数据
-			String[] payStrs = result.split("-");//获取支付方式 
-			goodsDataDb = goodsDataHelper.getWritableDatabase();
 			
-			jsWay = "人民币";
-			shPayMoney = payStrs[0];//记录  应该支付的金额
-			consumePayMoney = payStrs[1]; //记录   用户支付总金额
-			overPlus = payStrs[2]; //记录用户    应该找零的金额
-			updateSaleSheetNo();  //更新   销售数量和     获取单号
-			
-			//支付,成功    向    main 发送信息    更新ui:
-			Message msg = Message.obtain(); 
-			msg.what = SCAN_PAY_THREAD_IS_OK;
-			msg.obj = result;
-			handler.sendMessage(msg);
-			
-			if(vipInput){// 当前为    vip用户
-				//将  vip 用户信息  发送至服务器：
-				new VolleyUtils(this).getVolleyDataInfo(
-						String.format(Configs.SERVER_BASE_URL+Configs.UPDATE_VIP_SCORE,cVipNo,vipScore+fCurValue+""),
-						this,UPDATE_VIP_SCRORE_AUTHORITY);
-			}
-			break;
-			
-		case QUERY_GOODS_FRAGMENT_AUTHORITY://查询商品信息的   fragment
-			break;
-		default:
-			break;
 		}
+
 	}
 	
 	private String getFormatNumber(String text){
@@ -1497,88 +1507,28 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					 }
 						break;
 						
-					case Configs.SCANNIN_ALI_REQUEST_CODE:{
+					case Configs.SCANNIN_ALI_REQUEST_CODE:{  //支付宝付款
 						
 						MyProgressDialog.showProgress(this, "请稍后", "正在付款...");
-						
-						updateSaleSheetNo();  //更新销售数量和     获取单号
-						jsWay = "支付宝";
-						consumePayMoney = totalMoney.getText().toString().trim();
-						overPlus = "0.00";
 						
 						Bundle bundle = data.getExtras();
 						//显示扫描到的内容
 						String payId = bundle.getString("result");
 						
-						//拼接请求参数  ：data:
-						SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-						String timestamp = format.format(new Date());    //时间
+						toPay(payId,jsWay);  //拼接参数  并开始支付
 						
-						JSONObject testStr = new JSONObject();
-						
-						testStr.put("service", "alipay_pay_2");
-						testStr.put("terminal_no", sp.getString(Configs.POS_ID, "01"));  // 本机终端号
-						testStr.put("subject", "消费");  //消费主题
-						testStr.put("store_id", "001");
-						testStr.put("undiscountable_amount", "");
-						testStr.put("total_fee", "0.01");//totalMoney.getText().toString().trim()
-						testStr.put("out_trade_no", sellSheetNo);  //商户流水号
-						
-						testStr.put("timestamp", timestamp);
-						testStr.put("dynamic_id", payId); //扫描到的条形码
-						testStr.put("oto_pid",Content.SHOP_PID);
-						/**
-						 * 将数据  转换成键值对的形式      
-						 */
-						Map<String, String> map = MapUtils.getParamsFromJson(JSON.toJSONString(testStr));
-						// 然后对数据按键的字母顺序     进行排序     
-						String prestr = MapUtils.createLinkString(map); 
-						// 获取 排序后的字符串的摘要信息
-						String sign = MD5Util.GetMD5Code(prestr+ Content.PRIVATE_KEY);
-						
-						testStr.put("sign", sign);  //最后将    摘要信息  跟在   参数后面
-						
-						toServer(testStr); //开始支付
 					}
 						break;
 								    	
-					case Configs.SCANNIN_WE_CHAT_REQUEST_CODE:{
+					case Configs.SCANNIN_WE_CHAT_REQUEST_CODE:{ //微信  付款
 						
 						MyProgressDialog.showProgress(this, "请稍后", "正在付款...");
-						
-						updateSaleSheetNo();  //更新销售数量和     获取单号
-						jsWay = "微信";
-						consumePayMoney = totalMoney.getText().toString().trim();
-						overPlus = "0.00";
 						
 						Bundle bundle = data.getExtras();
 						//显示扫描到的内容
 						String payId = bundle.getString("result");
-						//拼接请求参数：data:
-						SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-						String timestamp = format.format(new Date());    //时间
-						JSONObject testStr = new JSONObject();
-						testStr.put("service", "wx_pay");
-						testStr.put("terminal_no", sp.getString(Configs.POS_ID, "01"));  // 本机终端号
-						testStr.put("subject", "消费");  //消费主题
-						testStr.put("total_fee", "0.01");//totalMoney.getText().toString().trim()
-						testStr.put("out_trade_no", sellSheetNo);  //商户流水号
 						
-						testStr.put("timestamp", timestamp);
-						testStr.put("dynamic_id", payId); //扫描到的条形码
-						testStr.put("oto_pid",Content.SHOP_PID); 
-						
-						/**
-						 * 将数据  转换成键值对的形式      
-						 */
-						Map<String, String> map = MapUtils.getParamsFromJson(JSON.toJSONString(testStr));
-						// 然后对数据按键的字母顺序     进行排序     
-						String prestr = MapUtils.createLinkString(map); 
-						// 获取 排序后的字符串的摘要信息
-						String sign = MD5Util.GetMD5Code(prestr+ Content.PRIVATE_KEY);
-						testStr.put("sign", sign);  //最后将    摘要信息  跟在   参数后面
-						
-						toServer(testStr);//开始支付
+						toPay(payId,jsWay);  //拼接参数  并开始支付
 					}
 					break;
 					case Configs.QUERY_ACTIVITY_REQUEST_CODE:{ //请求查询     商品信息数据的   activity返回数据：
@@ -1647,6 +1597,11 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 							msg.what = SCAN_PAY_THREAD_IS_OK;
 							msg.obj = jsWay.equals("微信") ? "微信":"支付宝";
 							handler.sendMessage(msg);
+						}else{
+							//支付失败    向    main 发送信息    更新ui:
+							Message msg = Message.obtain(); 
+							msg.what = SCAN_PAY_THREAD_IS_FAIL;
+							handler.sendMessage(msg);
 						}
 				}else{
 					//支付失败    向    main 发送信息    更新ui:
@@ -1657,6 +1612,42 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 			}
 		}).start();		
 	}
+	
+	/**
+	 * 开始支付
+	 */
+	private void toPay(String payId,String jsWay) {
+		//拼接请求参数：data:
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
+		String timestamp = format.format(new Date());    //时间
+		JSONObject testStr = new JSONObject();
+		testStr.put("service", jsWay.equals("微信")?"wx_pay":"alipay_pay_2");
+		testStr.put("terminal_no", sp.getString(Configs.POS_ID, "01"));  // 本机终端号
+		testStr.put("subject", "消费");  //消费主题
+		testStr.put("total_fee", "0.01");//totalMoney.getText().toString().trim()
+		testStr.put("out_trade_no", sellSheetNo);  //商户流水号
+		
+		if(jsWay.equals("支付宝")){
+			testStr.put("store_id", "001");
+			testStr.put("undiscountable_amount", "");
+		}
+		
+		testStr.put("timestamp", timestamp);
+		testStr.put("dynamic_id", payId); //扫描到的条形码
+		testStr.put("oto_pid",Content.SHOP_PID); 
+		
+		/**
+		 * 将数据  转换成键值对的形式      
+		 */
+		Map<String, String> map = MapUtils.getParamsFromJson(JSON.toJSONString(testStr));
+		// 然后对数据按键的字母顺序     进行排序     
+		String prestr = MapUtils.createLinkString(map); 
+		// 获取   排序后的字符串的摘要信息
+		String sign = MD5Util.GetMD5Code(prestr+ Content.PRIVATE_KEY);
+		testStr.put("sign", sign);  //最后将    摘要信息  跟在   参数后面
+		toServer(testStr);//开始支付
+	}
+	
 	
 	private static final int SCAN_PAY_THREAD_IS_FAIL = 19;//扫码支付失败
 

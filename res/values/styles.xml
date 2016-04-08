@@ -43,7 +43,8 @@
         <item name="android:textSize">@dimen/main_scan_btn_textSize</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
-        <item name="android:layout_margin">@dimen/main_sacn_btn_maigin</item>
+        <item name="android:layout_marginLeft">@dimen/main_sacn_btn_maigin</item>
+        <item name="android:layout_marginRight">@dimen/main_sacn_btn_maigin</item>
         <item name="android:background">@drawable/scan_btn_selector</item>
     </style>
 

@@ -16,6 +16,6 @@
 	<dimen name="main_scan_btn_height">27dp</dimen>
 	<dimen name="main_scan_btn_width">50dp</dimen>
 	<dimen name="main_scan_btn_textSize">13sp</dimen>
-	<dimen name="main_sacn_btn_maigin">2dp</dimen>
+	<dimen name="main_sacn_btn_maigin">1dp</dimen>
 	
 </resources>

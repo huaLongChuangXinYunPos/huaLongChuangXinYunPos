@@ -27,7 +27,7 @@
 	            android:layout_centerVertical="true"
 	            android:layout_toRightOf="@id/ic_logo"
 	            android:layout_marginLeft="2dp"
-	            android:text="华隆云pos"
+	            android:text="百货云pos"
 	            android:textColor="#000000"
 	            android:textSize="20sp"
 	            />
