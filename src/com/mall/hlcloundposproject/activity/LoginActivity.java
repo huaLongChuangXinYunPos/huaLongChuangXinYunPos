@@ -12,7 +12,9 @@ import com.mall.hlcloundposproject.entity.User;
 import com.mall.hlcloundposproject.tasks.TaskCallBack;
 import com.mall.hlcloundposproject.tasks.TaskResult;
 import com.mall.hlcloundposproject.tasks.UserLoginTask;
+import com.mall.hlcloundposproject.utils.KeyboardUtil;
 import com.mall.hlcloundposproject.utils.MyProgressDialog;
+import com.mall.hlcloundposproject.utils.MyToast;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -23,18 +25,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 /**
  * 登录   界面
  */
-public class LoginActivity extends Activity implements OnClickListener, TaskCallBack {
+public class LoginActivity extends Activity implements OnClickListener, TaskCallBack, OnTouchListener {
 
 	@ViewInject(R.id.account)
 	private EditText etAccount;
@@ -46,6 +52,12 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 	
 	@ViewInject(R.id.login_btn_exit)
 	private Button loginExit;
+	
+	@ViewInject(R.id.keys1)
+	private ImageView keysIc1;
+	
+	@ViewInject(R.id.keys2)
+	private ImageView keysIc2;
 	
 	/**
 	 * 尝试登录时的      账户和密码值：
@@ -72,6 +84,13 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 		loginSure.setOnClickListener(this);
 		loginExit.setOnClickListener(this);
 		
+		keysIc1.setOnClickListener(this);
+		keysIc2.setOnClickListener(this);
+		
+		
+		
+		etPassword.setOnTouchListener(this);
+		etAccount.setOnTouchListener(this);
 	}
 
 	//登录和取消的    单击事件：
@@ -89,14 +108,14 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 				// 账户验证：
 				if (TextUtils.isEmpty(account)) {
 					//  如果为null
-					etAccount.setError("账号不准为空");
+					MyToast.ToastIncenter(this, "账号不准为空").show();
 					etAccount.requestFocus();
 					break;
 				} 
 				
 				// 密码验证
 				if (TextUtils.isEmpty(password)) {
-					etPassword.setError("密码不准为空");
+					MyToast.ToastIncenter(this, "密码不准为空").show();
 					etPassword.requestFocus();
 					break;
 				} 
@@ -140,7 +159,7 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 						break;
 					default:
 						//查询到 多位用户
-						Toast.makeText(this, "请联系管理员，当前用户名存在冲突。",Toast.LENGTH_SHORT).show();
+						MyToast.ToastIncenter(this, "请联系管理员，当前用户名存在冲突。").show();
 						MyProgressDialog.stopProgress();
 						break;
 					}
@@ -150,7 +169,23 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 			case R.id.login_btn_exit:
 				finish();
 				break;
+				
+			case R.id.keys1:
+				etAccount.setFocusable(true);
+				etAccount.requestFocus();
+				etAccount.setInputType(InputType.TYPE_NULL);
+				new KeyboardUtil(this,getApplicationContext(),etAccount).showKeyboard();
+				
+				break;
+			case R.id.keys2:
+				etPassword.setFocusable(true);
+				etPassword.requestFocus();
+				etPassword.setInputType(InputType.TYPE_NULL);
+				new KeyboardUtil(this,getApplicationContext(),etPassword).showKeyboard();
+				
+				break;
 
+				
 			default:
 					break;
 		}
@@ -194,14 +229,14 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 							userdb.insert(Content.TABLE_USERS_NAME, null, values);
 						}else{
 							MyProgressDialog.stopProgress();
-							Toast.makeText(this, "请验证输入密码", Toast.LENGTH_SHORT).show();
+							MyToast.ToastIncenter(this,"请验证输入密码").show();
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
 			}else{
 				MyProgressDialog.stopProgress();
-				Toast.makeText(this, "请验证用户名或密码", Toast.LENGTH_SHORT).show();
+				MyToast.ToastIncenter(this, "请验证用户名或密码").show();
 			}
 		}
 	}
@@ -217,6 +252,35 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 		startActivity(intent);
 		finish();
 	}
-	
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		
+		if(event.getAction() == MotionEvent.ACTION_UP){
+			
+			switch(v.getId()){
+				
+				case R.id.account:
+					etAccount.setInputType(InputType.TYPE_NULL);
+					etAccount.setFocusable(true);
+					etPassword.setFocusable(false);
+					etAccount.requestFocus();
+					keysIc1.setClickable(true);
+					break;
+				case R.id.password:
+					etPassword.setInputType(InputType.TYPE_NULL);
+					etPassword.setFocusable(true);
+					etAccount.setFocusable(false);
+					etPassword.requestFocus();
+					keysIc2.setClickable(true);
+					break;
+				
+				default:
+					break;
+			
+			}
+		}
+		return false;
+	}
 
 }

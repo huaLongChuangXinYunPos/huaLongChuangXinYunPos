@@ -26,126 +26,159 @@
             android:text="@string/login_progress_ing"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </LinearLayout>
+    
+    
+    <FrameLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    >
 
-	<RelativeLayout 
-	    android:id="@+id/login_form"
-	    android:layout_width="fill_parent"
-	    android:background="@color/loginbg"
-	    android:layout_height="fill_parent" >
-	    
-	    <RelativeLayout
-	        android:id="@+id/titlebar"
-	        android:layout_width="match_parent"
-	        android:layout_height="47dp"
-	        >
-	      
-	        <TextView
-	            android:id="@+id/tv_titles"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_centerInParent="true"
-	            android:text="登录"
-	            android:textColor="@color/black"
-	            android:textSize="20sp"
-	            tools:ignore="HardcodedText" />
-	        
-	    </RelativeLayout>
-	     
-	     <View 
-	          android:layout_width="match_parent"
-	          android:layout_height="2dp"
-	          android:background="@color/highBlue"
-	          android:layout_below="@id/titlebar"
-	          />
-	    
-	     <RelativeLayout
-	        android:layout_below="@id/titlebar"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        >
-		     <EditText
-		        android:id="@+id/account"
+		<RelativeLayout 
+		    android:id="@+id/login_form"
+		    android:layout_width="fill_parent"
+		    android:background="@color/loginbg"
+		    android:layout_height="fill_parent" >
+		    
+		    <RelativeLayout
+		        android:id="@+id/titlebar"
 		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_alignParentLeft="false"
-		        android:layout_marginBottom="5dp"
-		        android:layout_marginLeft="10dp"
-		        android:layout_marginRight="10dp"
-		        android:layout_marginTop="20dp"
-		        android:ems="10"
-		        android:hint="请输入用户名"
-		        android:paddingLeft="35dp"
-		        android:textSize="14sp" >
-		    </EditText>
-		
-		    <EditText
-		        android:id="@+id/password"
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_below="@id/account"
-		        android:layout_marginBottom="5dp"
-		        android:layout_marginLeft="10dp"
-		        android:layout_marginRight="10dp"
-		        android:layout_marginTop="20dp"
-		        android:ems="10"
-		        android:hint="请输入密码"
-		        android:inputType="textPassword"
-		        android:paddingLeft="35dp"
-		        android:textSize="14sp" />
-		
-		    <ImageView
-		        android:id="@+id/iv_user"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_alignLeft="@id/account"
-		        android:layout_alignTop="@id/account"
-		        android:layout_marginLeft="10dp"
-		        android:layout_marginTop="5dp"
-		        android:src="@drawable/login_account" />
-		
-		    <ImageView
-		        android:id="@+id/ImageView02"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_alignLeft="@id/password"
-		        android:layout_alignTop="@id/password"
-		        android:layout_marginLeft="10dp"
-		        android:layout_marginTop="5dp"
-		        android:src="@drawable/login_pwd" />
-		
-		    <LinearLayout
-		        android:layout_width="match_parent"
-		        android:layout_height="wrap_content"
-		        android:layout_marginTop="10dp"
-		        android:layout_below="@id/password"
-		        android:orientation="horizontal" >
-		
-		        <Button
-		            android:id="@+id/login_btn_sure"
+		        android:layout_height="47dp"
+		        >
+		        <TextView
+		            android:id="@+id/tv_titles"
 		            android:layout_width="wrap_content"
-		            android:layout_height="40dp"
-		            android:layout_marginBottom="15dp"
-		            android:layout_marginLeft="15dp"
-		            android:layout_marginRight="5dp"
-		            android:layout_marginTop="15dp"
-		            android:layout_weight="1.0"
-		            android:background="@drawable/btn_orange_selector"
+		            android:layout_height="wrap_content"
+		            android:layout_centerInParent="true"
 		            android:text="登录"
-		            android:textColor="@drawable/login_btn_text_selector" />
+		            android:textColor="@color/black"
+		            android:textSize="20sp"
+		            tools:ignore="HardcodedText" />
 		        
-		        <Button
-		            android:id="@+id/login_btn_exit"
-		            android:layout_width="wrap_content"
-		            android:layout_height="40dp"
-		            android:layout_marginBottom="15dp"
-		            android:layout_marginLeft="15dp"
-		            android:layout_marginRight="5dp"
-		            android:layout_marginTop="15dp"
-		            android:layout_weight="1.0"
-		            android:background="@drawable/btn_orange_selector"
-		            android:text="取消"
-		            android:textColor="@drawable/login_btn_text_selector" />
-		    </LinearLayout>
-	     </RelativeLayout>
-	</RelativeLayout>
+		    </RelativeLayout>
+		     
+		     <View 
+		          android:layout_width="match_parent"
+		          android:layout_height="2dp"
+		          android:background="@color/highBlue"
+		          android:layout_below="@id/titlebar"
+		          />
+		    
+		     <RelativeLayout
+		        android:layout_below="@id/titlebar"
+		        android:layout_width="match_parent"
+		        android:layout_height="match_parent"
+		        >
+		        <EditText
+			        android:id="@+id/account"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentLeft="false"
+			        android:layout_marginBottom="5dp"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="10dp"
+			        android:layout_marginTop="20dp"
+			        android:ems="10"
+			        android:hint="请输入用户名"
+			        android:paddingLeft="35dp"
+			        android:textSize="14sp" />
+		        
+		          <ImageView 
+		              android:id="@+id/keys1"
+			   		    android:layout_width="wrap_content"
+			   		    android:layout_height="wrap_content"
+			   		    android:background="@drawable/ic_dialog_keyboard"
+			   		    android:layout_alignRight="@id/account"
+			   		    android:layout_alignTop="@id/account"
+			   		    android:layout_centerVertical="true"
+			   		    android:layout_marginRight="10dp"
+			        	android:layout_marginTop="5dp"
+			   		    />
+			
+			    <EditText
+			        android:id="@+id/password"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_below="@id/account"
+			        android:layout_marginBottom="5dp"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginRight="10dp"
+			        android:layout_marginTop="20dp"
+			        android:ems="10"
+			        android:hint="请输入密码"
+			        android:inputType="textPassword"
+			        android:paddingLeft="35dp"
+			        android:textSize="14sp" />
+			    
+			     <ImageView 
+			         android:id="@+id/keys2"
+			   		    android:layout_width="wrap_content"
+			   		    android:layout_height="wrap_content"
+			   		    android:background="@drawable/ic_dialog_keyboard"
+			   		    android:layout_alignRight="@id/password"
+			   		    android:layout_alignTop="@id/password"
+			   		    android:layout_centerVertical="true"
+			   		    android:layout_marginRight="10dp"
+			        	android:layout_marginTop="5dp"
+			   		    />
+			
+			    <ImageView
+			        android:id="@+id/iv_user"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignLeft="@id/account"
+			        android:layout_alignTop="@id/account"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginTop="5dp"
+			        android:src="@drawable/login_account" />
+			
+			    <ImageView
+			        android:id="@+id/ImageView02"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignLeft="@id/password"
+			        android:layout_alignTop="@id/password"
+			        android:layout_marginLeft="10dp"
+			        android:layout_marginTop="5dp"
+			        android:src="@drawable/login_pwd" />
+			    
+			
+			    <LinearLayout
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_marginTop="10dp"
+			        android:layout_below="@id/password"
+			        android:orientation="horizontal" >
+			
+			        <Button
+			            android:id="@+id/login_btn_sure"
+			            android:layout_width="wrap_content"
+			            android:layout_height="40dp"
+			            android:layout_marginBottom="15dp"
+			            android:layout_marginLeft="15dp"
+			            android:layout_marginRight="5dp"
+			            android:layout_marginTop="15dp"
+			            android:layout_weight="1.0"
+			            android:background="@drawable/btn_orange_selector"
+			            android:text="登录"
+			            android:textColor="@drawable/login_btn_text_selector" />
+			        
+			        <Button
+			            android:id="@+id/login_btn_exit"
+			            android:layout_width="wrap_content"
+			            android:layout_height="40dp"
+			            android:layout_marginBottom="15dp"
+			            android:layout_marginLeft="15dp"
+			            android:layout_marginRight="5dp"
+			            android:layout_marginTop="15dp"
+			            android:layout_weight="1.0"
+			            android:background="@drawable/btn_orange_selector"
+			            android:text="取消"
+			            android:textColor="@drawable/login_btn_text_selector" />
+			    </LinearLayout>
+		     </RelativeLayout>
+		</RelativeLayout>
+	
+	  <include layout="@layout/key_board_layout"/>
+	  
+	</FrameLayout>
 </merge>
