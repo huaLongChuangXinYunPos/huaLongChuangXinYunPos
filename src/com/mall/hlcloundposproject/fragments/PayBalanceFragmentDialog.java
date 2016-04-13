@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.mall.hlcloundposproject.Configs;
 import com.mall.hlcloundposproject.R;
+import com.mall.hlcloundposproject.utils.NumKeysUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -17,6 +18,8 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -31,7 +34,7 @@ public class PayBalanceFragmentDialog extends DialogFragment implements OnClickL
 	private TextView shouldPay; //应付金额
 	
 	@ViewInject(R.id.pay_input_banlance)
-	private TextView inputPay;//实付金额
+	private EditText inputPay;//实付金额
 	
 	@ViewInject(R.id.pay_overplus)
 	private TextView overplusPay; //找零金额
@@ -59,6 +62,8 @@ public class PayBalanceFragmentDialog extends DialogFragment implements OnClickL
 
 	private String[] payStrs;
 	
+	private ImageView keysIc;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,6 +85,10 @@ public class PayBalanceFragmentDialog extends DialogFragment implements OnClickL
 		inputPay.addTextChangedListener(this);
 		btnExit.setOnClickListener(this);
 		btnSure.setOnClickListener(this);
+		
+		keysIc = (ImageView) view.findViewById(R.id.key_icon);
+		
+		keysIc.setOnClickListener(this);
 
 		return view;
 	}
@@ -110,6 +119,19 @@ public class PayBalanceFragmentDialog extends DialogFragment implements OnClickL
 			case R.id.pay_exit_btn:
 				//取消  结算界面：
 				onDestroyView();
+				
+			case R.id.key_icon:
+				
+				//弹出数字键盘
+				NumKeysUtils keyDialog = new NumKeysUtils(getActivity(), R.style.MyKeyDialogStyleTop,
+						inputPay, NumKeysUtils.FLOAT,new NumKeysUtils.TextChangeListener() {
+							@Override
+							public void onTextChange(String value) {
+								inputPay.setText(value);
+							}
+						});
+				keyDialog.show();
+				
 				break;
 		}
 	}
@@ -137,6 +159,7 @@ public class PayBalanceFragmentDialog extends DialogFragment implements OnClickL
 			if((inputMoney - Float.parseFloat(payStrs[0]))>=0){
 				overplusPay.setText(getFormatFloat((inputMoney - Float.parseFloat(payStrs[0]))+"").toString());
 				btnSure.setEnabled(true);
+				inputPay.setError(null);
 			}else{
 				inputPay.setError("当前金额输入错误");
 				btnSure.setEnabled(false);

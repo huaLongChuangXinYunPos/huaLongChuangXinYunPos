@@ -2,6 +2,7 @@ package com.mall.hlcloundposproject.fragments;
 
 import com.mall.hlcloundposproject.Configs;
 import com.mall.hlcloundposproject.R;
+import com.mall.hlcloundposproject.utils.NumKeysUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -14,16 +15,17 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 public class UpdateAmountFragment extends DialogFragment implements OnClickListener {
 	
-	@ViewInject(R.id.constume_back_fragment_inputEt)
+	@ViewInject(R.id.update_amount_fragment_input)
 	private EditText etInput;
 	
-	@ViewInject(R.id.constum_back_fragment_sure)
+	@ViewInject(R.id.update_amount_sure)
 	private Button sureBtn;
 	
-	@ViewInject(R.id.constum_back_fragment_exit)
+	@ViewInject(R.id.update_amount_exit)
 	private Button exitBtn;
 
 	public static UpdateAmountFragment getInstance() {
@@ -32,7 +34,9 @@ public class UpdateAmountFragment extends DialogFragment implements OnClickListe
 	
 	//定义   fragment的回调
 	private FragmentCallback callback;
-
+	
+	private ImageView keysIc;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,9 +51,7 @@ public class UpdateAmountFragment extends DialogFragment implements OnClickListe
 		
 		View view = inflater.inflate(R.layout.update_amount_fragment, container,true);
 		
-		EditText ed = (EditText) view.findViewById(R.id.constume_back_fragment_inputEt);
-		
-		ed.setHint("请输入商品数量");
+		keysIc = (ImageView) view.findViewById(R.id.keys);
 		
 		ViewUtils.inject(this,view);
 		
@@ -64,6 +66,7 @@ public class UpdateAmountFragment extends DialogFragment implements OnClickListe
 	private void initListener() {
 		sureBtn.setOnClickListener(this);
 		exitBtn.setOnClickListener(this);
+		keysIc.setOnClickListener(this);
 	}
 
 	@Override
@@ -71,7 +74,7 @@ public class UpdateAmountFragment extends DialogFragment implements OnClickListe
 		
 		switch(v.getId()){
 		
-			case R.id.constum_back_fragment_sure:
+			case R.id.update_amount_sure:
 				String etAmount = etInput.getText().toString().trim();
 				
 				callback.fragmentCallback(etAmount, Configs.UPDATE_FRAGMENT_AMOUNT);
@@ -79,10 +82,25 @@ public class UpdateAmountFragment extends DialogFragment implements OnClickListe
 				onDestroyView();
 				
 				break;
-			case R.id.constum_back_fragment_exit:
+			case R.id.update_amount_exit:
 				
 				//销毁     fragment
 				onDestroyView();
+				
+				break;
+				
+			case R.id.keys:
+				
+				//弹出数字键盘
+				NumKeysUtils keyDialog = new NumKeysUtils(getActivity(), R.style.MyKeyDialogStyleTop,
+						etInput, NumKeysUtils.FLOAT,
+						new NumKeysUtils.TextChangeListener() {
+							@Override
+							public void onTextChange(String value) {
+								etInput.setText(value);
+							}
+						});
+				keyDialog.show();
 				
 				break;
 			

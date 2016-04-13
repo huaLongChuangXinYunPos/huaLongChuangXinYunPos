@@ -34,14 +34,41 @@
             android:layout_height="2dip"  
             android:background="@color/highBlue"/> 
     
-    <EditText
-        android:id="@+id/vip_fragment_inputEt"
+    <LinearLayout 
+	         android:layout_width="match_parent"
+	         android:layout_height="wrap_content"
+	         android:orientation="horizontal"
+	        
+	         >
+	         <EditText
+		        android:id="@+id/vip_fragment_inputEt"
+		        android:layout_width="0dp"
+		        android:layout_weight="1"
+		        android:layout_height="wrap_content"
+		        android:layout_margin="10dp"
+		        android:background="@null"
+		        android:singleLine="true"
+		        android:layout_marginLeft="5dp"
+		        android:hint="@string/vip_fragment_input_vipnum"
+	      	  />
+		    <ImageView 
+		        android:id="@+id/keys_icon"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:background="@drawable/ic_dialog_keyboard"
+			    android:layout_gravity="right|center"
+			    android:layout_marginRight="20dp"
+			    />
+	     </LinearLayout>
+	     
+    <View 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:layout_margin="10dp"
-        android:hint="@string/vip_fragment_input_vipnum"
+        android:layout_height="2dp"
+		android:background="@color/lowRed"        
+		android:layout_marginLeft="5dp"
+		android:layout_marginRight="5dp"
         />
+    
     <LinearLayout 
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
@@ -61,4 +88,5 @@
 	        android:text="@string/update_password_fragment_exitupdate"
 	        />
 	</LinearLayout>
+	
 </LinearLayout>

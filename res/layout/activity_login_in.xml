@@ -82,17 +82,7 @@
 			        android:paddingLeft="35dp"
 			        android:textSize="14sp" />
 		        
-		          <ImageView 
-		              android:id="@+id/keys1"
-			   		    android:layout_width="wrap_content"
-			   		    android:layout_height="wrap_content"
-			   		    android:background="@drawable/ic_dialog_keyboard"
-			   		    android:layout_alignRight="@id/account"
-			   		    android:layout_alignTop="@id/account"
-			   		    android:layout_centerVertical="true"
-			   		    android:layout_marginRight="10dp"
-			        	android:layout_marginTop="5dp"
-			   		    />
+		          
 			
 			    <EditText
 			        android:id="@+id/password"
@@ -109,18 +99,6 @@
 			        android:paddingLeft="35dp"
 			        android:textSize="14sp" />
 			    
-			     <ImageView 
-			         android:id="@+id/keys2"
-			   		    android:layout_width="wrap_content"
-			   		    android:layout_height="wrap_content"
-			   		    android:background="@drawable/ic_dialog_keyboard"
-			   		    android:layout_alignRight="@id/password"
-			   		    android:layout_alignTop="@id/password"
-			   		    android:layout_centerVertical="true"
-			   		    android:layout_marginRight="10dp"
-			        	android:layout_marginTop="5dp"
-			   		    />
-			
 			    <ImageView
 			        android:id="@+id/iv_user"
 			        android:layout_width="wrap_content"

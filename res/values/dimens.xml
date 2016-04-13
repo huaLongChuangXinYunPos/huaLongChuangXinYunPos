@@ -18,4 +18,9 @@
 	<dimen name="main_scan_btn_textSize">13sp</dimen>
 	<dimen name="main_sacn_btn_maigin">1dp</dimen>
 	
+	
+	<!-- 键盘的   高度和宽度 -->
+    <dimen name="dimens_100_160">180dip</dimen>
+    <dimen name="dimens_130_160">180dip</dimen>
+	
 </resources>

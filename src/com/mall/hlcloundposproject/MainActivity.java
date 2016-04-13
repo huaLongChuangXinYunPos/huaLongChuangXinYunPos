@@ -38,10 +38,12 @@ import com.mall.hlcloundposproject.fragments.VipFragment;
 import com.mall.hlcloundposproject.tasks.GetGoodsInfoAsyncTask;
 import com.mall.hlcloundposproject.tasks.TaskCallBack;
 import com.mall.hlcloundposproject.tasks.TaskResult;
+import com.mall.hlcloundposproject.utils.ExitApplicationUtils;
 import com.mall.hlcloundposproject.utils.FastJsonUtils;
 import com.mall.hlcloundposproject.utils.MD5Util;
 import com.mall.hlcloundposproject.utils.MapUtils;
 import com.mall.hlcloundposproject.utils.MyProgressDialog;
+import com.mall.hlcloundposproject.utils.MyToast;
 import com.mall.hlcloundposproject.utils.SelledToServerUtils;
 import com.mall.hlcloundposproject.utils.SocketToNet;
 import com.mall.hlcloundposproject.utils.TimeUtils;
@@ -76,6 +78,8 @@ import android.hardware.barcode.Scanner;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.Selection;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -92,7 +96,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements TaskCallBack,
-		FragmentCallback, OnClickListener, OnItemClickListener, VolleyCallback {
+		FragmentCallback, OnClickListener, OnItemClickListener, VolleyCallback, TextWatcher {
 
 	@ViewInject(R.id.keys_1)
 	private Button keys_1;
@@ -241,14 +245,15 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					break;
 	
 				case Scanner.BARCODE_NOREAD: { // 处理  扫描仪  发来的消息
-					Toast.makeText(MainActivity.this, "未扫描到条码信息,请检查扫描仪设备", 0)
-							.show();
+					MyToast.ToastIncenter(MainActivity.this, "未扫描到条码信息,请检查扫描仪设备" ).show();
+					
 					break;
 				}
 	
 				case UPDATE_ALLGOODS_DATA_COMPLATE: { // 处理 更新 商品信息的 ui
 					proDialog.dismiss();
-					Toast.makeText(MainActivity.this, "商品信息更新完成...", 0).show();
+					MyToast.ToastIncenter(MainActivity.this, "商品信息更新完成..." ).show();
+					
 					break;
 				}
 				
@@ -264,7 +269,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					//像服务器  发送数据  并更新本地数据信息：
 					SelledToServerUtils.selledToServer(sellSheetNo,goodsDataHelper,sp);
 					
-					Toast.makeText(MainActivity.this, "正在打印售货单,请稍等...", 1).show();
+					MyToast.ToastIncenter(MainActivity.this, "正在打印售货单,请稍等..." ).show();
 					
 					printSellForm();
 					
@@ -273,7 +278,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 				
 				case SCAN_PAY_THREAD_IS_FAIL:{  //扫码支付失败
 					MyProgressDialog.stopProgress();
-					Toast.makeText(MainActivity.this, "支付失败", 1).show();
+					MyToast.ToastIncenter(MainActivity.this, "支付失败" ).show();
 				}
 				
 				default:
@@ -289,6 +294,8 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		ExitApplicationUtils.getInstance().addActivity(this);
 
 		user = (User) getIntent().getSerializableExtra("user");// 获取当前用户对象
 		goodsDataHelper = new MyOpenHelper(MainActivity.this,
@@ -318,6 +325,8 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 		
 		sp = getSharedPreferences(Configs.APP_NAME, MODE_PRIVATE);
 		dayDate = TimeUtils.getSystemNowTime("yyyy-MM-dd");//获取      当天数据
+		
+		inScanBar.addTextChangedListener(this);
 		
 		//清除    前一天销售数量记录数据：
 		String beforeDay = getBeforeDay();
@@ -569,8 +578,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 				MyProgressDialog.showProgress(this, "请稍后", "正在查询该条码...");
 				queryCodeBarIsExists(codeBarStr);
 			} else {
-				Toast.makeText(this, "条码格式不正确，请重新输入", Toast.LENGTH_SHORT)
-						.show();
+				MyToast.ToastIncenter(MainActivity.this, "条码格式不正确，请重新输入" ).show();
 			}
 			break;
 
@@ -593,10 +601,10 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					VipFragment fragment = VipFragment.getInstance();
 					fragment.show(getSupportFragmentManager(), "vipF");
 				}else{
-					Toast.makeText(this, "当前已经是会员，不准重复输入", 1).show();
+					MyToast.ToastIncenter(MainActivity.this,"当前已经是会员，不准重复输入" ).show();
 				}
 			} else {
-				Toast.makeText(this, "当前无结算商品", 0).show();
+				MyToast.ToastIncenter(MainActivity.this,"当前无结算商品" ).show();
 			}
 			break;
 		case R.id.main_keysF5:// 结算
@@ -630,15 +638,15 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 							GET_CALCULATE_WAY_AUTHORITY);
 				}
 			} else {
-				Toast.makeText(this, "当前无商品可结算", Toast.LENGTH_SHORT).show();
+				MyToast.ToastIncenter(MainActivity.this, "当前无商品可结算" ).show();
+				
 			}
 			break;
 
 		case R.id.main_keysF6:// 重新打印
 		case R.id.main_keys_others_re_print:
 			if (list.size() != 0) {
-				Toast.makeText(this, "正在打印请稍等...", 1).show();
-				
+				MyToast.ToastIncenter(MainActivity.this, "正在打印请稍等..." ).show();
 				new Thread(new Runnable(){
 
 					@Override
@@ -649,7 +657,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 				}).start();
 				
 			} else {
-				Toast.makeText(this, "当前无商品可以打印", Toast.LENGTH_SHORT).show();
+				MyToast.ToastIncenter(MainActivity.this, "当前无商品可以打印" ).show();
 			}
 			break;
 		case R.id.main_keysF2:// 输入用户信息：
@@ -665,7 +673,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 						.getInstance();
 				upFragment.show(getSupportFragmentManager(), "upFragment");
 			} else {
-				Toast.makeText(this, "当前未选中任何商品项", 0).show();
+				MyToast.ToastIncenter(MainActivity.this,  "当前未选中任何商品项" ).show();
 			}
 			break;
 		case R.id.main_keysF3:// 客退
@@ -694,11 +702,11 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 							good.getcBarcode(), good.getAmount(),
 							good.getPayMoney()));
 				}
-				Toast.makeText(this, "挂单成功", Toast.LENGTH_LONG).show();
+				MyToast.ToastIncenter(MainActivity.this,  "挂单成功" ).show();
 				list.clear();
 				adapter.notifyDataSetChanged();
 			} else {
-				Toast.makeText(this, "当前无单可挂", Toast.LENGTH_LONG).show();
+				MyToast.ToastIncenter(MainActivity.this, "当前无单可挂" ).show();
 			}
 			break;
 		case R.id.main_keysF9:// 取单
@@ -715,7 +723,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 				 */
 				selectTempTableNamesToShow(tempDataDb, cursor);
 			} else {
-				Toast.makeText(this, "当前没有正在等待的单", Toast.LENGTH_SHORT).show();
+				MyToast.ToastIncenter(MainActivity.this, "当前没有正在等待的单" ).show();
 			}
 			break;
 
@@ -970,7 +978,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 				new RequestCallBack<String>() {
 					@Override
 					public void onFailure(HttpException arg0, String arg1) {
-						Toast.makeText(MainActivity.this, "请检查服务器", 0).show();
+						MyToast.ToastIncenter(MainActivity.this, "请检查服务器" ).show();
 						proDialog.dismiss();
 					}
 					@Override
@@ -1011,8 +1019,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 									};
 								}.start();
 							} else {
-								Toast.makeText(MainActivity.this, "当前服务器无数据", 0)
-										.show();
+								MyToast.ToastIncenter(MainActivity.this,  "当前服务器无数据" ).show();
 							}
 						}
 					}
@@ -1054,7 +1061,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 			selectFragment.show(getSupportFragmentManager(),
 					"SelectFormFragment");
 		} else if (tableNames.size() == 0) {
-			Toast.makeText(this, "当前没有正在等待的单", Toast.LENGTH_SHORT).show();
+			MyToast.ToastIncenter(MainActivity.this, "当前没有正在等待的单" ).show();
 		}
 	}
 
@@ -1209,7 +1216,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					goodsDataDb.delete("t_"+Content.TABLE_SELL_FORM,
 							" cSaleSheetNo = '"+ result +"'", null);
 				}else{
-					Toast.makeText(this, "当前单号不存在", 1).show();
+					MyToast.ToastIncenter(MainActivity.this,  "当前单号不存在" ).show();
 				}
 				adapter.notifyDataSetChanged();
 				break;
@@ -1255,7 +1262,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivityForResult(intent, Configs.SCANNIN_ALI_REQUEST_CODE);
 				}else{
-					Toast.makeText(this, "当前版本未集成该支付方式", 1).show();
+					MyToast.ToastIncenter(MainActivity.this, "当前版本未集成该支付方式").show();
 				}
 				break;
 				
@@ -1409,7 +1416,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 				editNameDialog.show(getSupportFragmentManager(), "PayDialog");
 			} else {
 				// 获取失败：
-				Toast.makeText(this, "当前无可结算类型，请检查服务器是否开启...", 1).show();
+				MyToast.ToastIncenter(MainActivity.this,"当前无可结算类型，请检查服务器是否开启...").show();
 			}
 			break;
 		default:
@@ -1421,7 +1428,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 	public void vollayFinishedFail(int authority) {
 		switch (authority) {
 		case GET_CALCULATE_WAY_AUTHORITY:
-			Toast.makeText(this, "当前无结算方式，请检查是否开启服务器...", 0).show();
+			MyToast.ToastIncenter(MainActivity.this,"当前无结算方式，请检查是否开启服务器...").show();
 			break;
 		}
 	}
@@ -1462,13 +1469,11 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 					adapter.notifyDataSetChanged();// 更新 适配器
 				} else {
 					// 服务器 未返回数据
-					Toast.makeText(MainActivity.this, "请检查服务器是否连接",
-							Toast.LENGTH_SHORT).show();
+					MyToast.ToastIncenter(MainActivity.this,"请检查服务器是否连接").show();
 				}
 			} else {
 				// 区间内 无数据：
-				Toast.makeText(MainActivity.this, "当前商品不存在，请决定是否出售",
-						Toast.LENGTH_SHORT).show();
+				MyToast.ToastIncenter(MainActivity.this,"当前商品不存在，请决定是否出售").show();
 			}
 			etCodeBar.setText("");
 			MyProgressDialog.stopProgress();
@@ -1501,8 +1506,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 							 MyProgressDialog.showProgress(this, "请稍后", "正在查询该条码...");
 							 queryCodeBarIsExists(cCodeBar);
 						 } else {
-							 Toast.makeText(this, "条码格式不正确，请重新输入", Toast.LENGTH_SHORT)
-							 .show();
+							MyToast.ToastIncenter(MainActivity.this, "条码格式不正确，请重新输入").show();
 						 }
 					 }
 						break;
@@ -1545,7 +1549,7 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 							consumer = (Consumer) data.getExtras().getSerializable("consumer");
 							//获取到      客户信息
 							isAddConsumerInfo = true;
-							Toast.makeText(this, "客户信息添加成功", 1).show();
+							MyToast.ToastIncenter(MainActivity.this,  "客户信息添加成功").show();
 							System.out.println(consumer.toString());
 						}
 					}
@@ -1650,5 +1654,47 @@ public class MainActivity extends FragmentActivity implements TaskCallBack,
 	
 	
 	private static final int SCAN_PAY_THREAD_IS_FAIL = 19;//扫码支付失败
+	
+	@ViewInject(R.id.scan_code_in_bar)
+	private EditText inScanBar;  //存放扫描到的数据信息
+	
+	@Override
+	public void afterTextChanged(Editable s) {
+		
+		if(s.toString()!=null&& !s.toString().equals("")){
+//			开始查询条码是否存在
+			MyProgressDialog.showProgress(this, "请稍后", "正在查询该条码...");
+			queryCodeBarIsExists(codeBarStr);
+			inScanBar.setText("");
+		}
+	}
+	
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+	}
+	
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+	}
+	
+	
+	/* 再按一次退出程序   禁用返回键 */
+	private long exitTime = 0;
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+			if ((System.currentTimeMillis() - exitTime) > 2000) { //第一次点击
+				MyToast.ToastIncenter(this, "再按一次退出程序").show();
+				exitTime = System.currentTimeMillis();
+			} else {//第二次点击
+				finish();
+				ExitApplicationUtils.getInstance().exit();
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 }

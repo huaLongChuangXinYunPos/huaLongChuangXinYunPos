@@ -12,6 +12,8 @@ import com.mall.hlcloundposproject.db.OperationDbTableUtils;
 import com.mall.hlcloundposproject.entity.Consumer;
 import com.mall.hlcloundposproject.fragments.AddConsumerInfoFragment;
 import com.mall.hlcloundposproject.fragments.FragmentCallback;
+import com.mall.hlcloundposproject.utils.ExitApplicationUtils;
+import com.mall.hlcloundposproject.utils.MyToast;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -20,6 +22,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -48,6 +51,7 @@ public class ConsumerInfoActivity extends FragmentActivity implements FragmentCa
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_consumer_info);
+		
 		ViewUtils.inject(this);
 		openHelper = new MyOpenHelper(this, Content.USER_INFO_DB_NAME);
 		userDb = openHelper.getReadableDatabase();

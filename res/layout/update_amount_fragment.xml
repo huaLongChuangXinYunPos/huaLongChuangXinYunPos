@@ -44,14 +44,43 @@
    			 android:orientation="vertical"
    			 android:padding="5dp"
          >
-       	<EditText
-	        android:id="@+id/constume_back_fragment_inputEt"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="15dp"
-	        android:inputType="numberDecimal"
-	        android:layout_marginBottom="10dp"
-	        />
+       	<LinearLayout 
+	             android:layout_width="match_parent"
+	   			 android:layout_height="wrap_content"
+	   			 android:orientation="horizontal"
+	   			 android:layout_marginTop="15dp"
+	   			 android:layout_marginLeft="5dp"
+	         	>
+		       	<EditText 
+			        android:id="@+id/update_amount_fragment_input"
+			        android:layout_width="0dp"
+			        android:layout_weight="1"
+			        android:layout_height="wrap_content"
+			        android:padding="5dp"
+			        android:textSize="18sp"
+			        android:background="@null"
+			        android:inputType="numberDecimal"
+			        android:layout_marginRight="5dp"
+			        android:singleLine="true"
+			        android:layout_marginBottom="4dp"
+			        android:hint="请输入商品数量"
+		        	/>
+		       	 <ImageView 
+			        android:id="@+id/keys"
+				    android:layout_width="wrap_content"
+				    android:layout_height="wrap_content"
+				    android:background="@drawable/ic_dialog_keyboard"
+				    android:layout_gravity="right|center"
+				    android:layout_marginRight="20dp"
+				    />
+	    	</LinearLayout>
+	    	<View
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="1dp"
+	    	    android:layout_marginLeft="5dp"
+	    	    android:layout_marginRight="5dp"
+	    	    android:background="@color/lowRed"
+	    	    />
     
 	    <LinearLayout 
 	        android:layout_marginTop="10dp"
@@ -61,12 +90,12 @@
 		    android:orientation="horizontal">
 	    
 		    <Button 
-		        android:id="@+id/constum_back_fragment_sure"
+		        android:id="@+id/update_amount_sure"
 		        style="@style/LoginBtnStyle"
 		        android:text="@string/update_password_fragment_sureupdate"
 		        />
 		    <Button
-		        android:id="@+id/constum_back_fragment_exit"
+		        android:id="@+id/update_amount_exit"
 		        style="@style/LoginBtnStyle"
 		        android:text="@string/update_password_fragment_exitupdate"
 		        />

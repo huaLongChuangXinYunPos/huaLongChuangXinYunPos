@@ -13,13 +13,16 @@ import com.mall.hlcloundposproject.entity.JsType;
 import com.mall.hlcloundposproject.entity.SpecialGoods;
 import com.mall.hlcloundposproject.entity.User;
 import com.mall.hlcloundposproject.entity.VIPGoods;
+import com.mall.hlcloundposproject.utils.ExitApplicationUtils;
 import com.mall.hlcloundposproject.utils.FastJsonUtils;
 import com.mall.hlcloundposproject.utils.GetDeviceId;
+import com.mall.hlcloundposproject.utils.MyToast;
 import com.mall.hlcloundposproject.utils.SelledToServerUtils;
 import com.mall.hlcloundposproject.utils.VolleyUtils;
 import com.mall.hlcloundposproject.utils.VolleyUtils.VolleyCallback;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.Toast;
 import android.app.Activity;
 import android.content.Intent;
@@ -46,6 +49,8 @@ public class SplashActivity extends Activity implements Runnable,VolleyCallback{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_splash);
+		
+		ExitApplicationUtils.getInstance().addActivity(this);
 		
 		userHelper = new MyOpenHelper(SplashActivity.this,Content.USER_INFO_DB_NAME);
 		goodsHelper = new MyOpenHelper(SplashActivity.this, Content.GOODS_DB_NAME);
@@ -257,10 +262,29 @@ public class SplashActivity extends Activity implements Runnable,VolleyCallback{
 		case GET_USERS_DATA_AUTHORITY: //获取   用户 基本信息，存入到本地：
 			
 			//扉页  不处理  失败数据：   提示用户
-			Toast.makeText(this, "当前未开启服务器", 1).show();
+			MyToast.ToastIncenter(this, "当前未开启服务器").show();
 			
 			break;
 		}
 	}
+	
+	/* 再按一次退出程序   禁用返回键 */
+	private long exitTime = 0;
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+			if ((System.currentTimeMillis() - exitTime) > 2000) {
+				MyToast.ToastIncenter(this, "再按一次退出程序").show();
+				exitTime = System.currentTimeMillis();
+			} else {
+				finish();
+				ExitApplicationUtils.getInstance().exit();
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 	
 }

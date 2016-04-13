@@ -2,6 +2,7 @@ package com.mall.hlcloundposproject.fragments;
 
 import com.mall.hlcloundposproject.Configs;
 import com.mall.hlcloundposproject.R;
+import com.mall.hlcloundposproject.utils.NumKeysUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -16,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 /**
  * 商品  单号  查询    fragment
@@ -49,6 +51,9 @@ public class BackFragment extends DialogFragment implements OnClickListener {
 		callback = (FragmentCallback) getActivity();
 	}
 	
+	
+	private ImageView keysIc;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -59,6 +64,8 @@ public class BackFragment extends DialogFragment implements OnClickListener {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);  
 		
 		View view = inflater.inflate(R.layout.consume_back_fragment, container,true);
+		
+		keysIc = (ImageView) view.findViewById(R.id.key);
 		
 		EditText ed = (EditText) view.findViewById(R.id.constume_back_fragment_inputEt);
 		ed.setHint("请输入客退单号");
@@ -76,6 +83,7 @@ public class BackFragment extends DialogFragment implements OnClickListener {
 	private void initListener() {
 		sureBtn.setOnClickListener(this);
 		exitBtn.setOnClickListener(this);
+		keysIc.setOnClickListener(this);
 	}
 
 	@Override
@@ -108,6 +116,21 @@ public class BackFragment extends DialogFragment implements OnClickListener {
 			case R.id.constum_back_fragment_exit:
 				//销毁     fragment
 				onDestroyView();
+				
+				break;
+				
+			case R.id.key:
+				
+				//弹出数字键盘
+				NumKeysUtils keyDialog = new NumKeysUtils(getActivity(), R.style.MyKeyDialogStyleTop,
+						etInput, NumKeysUtils.FLOAT,
+						new NumKeysUtils.TextChangeListener() {
+							@Override
+							public void onTextChange(String value) {
+								etInput.setText(value);
+							}
+						});
+				keyDialog.show();
 				
 				break;
 			

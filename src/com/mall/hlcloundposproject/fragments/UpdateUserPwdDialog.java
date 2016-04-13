@@ -13,6 +13,7 @@ import com.mall.hlcloundposproject.R;
 import com.mall.hlcloundposproject.activity.LoginActivity;
 import com.mall.hlcloundposproject.db.MyOpenHelper;
 import com.mall.hlcloundposproject.entity.User;
+import com.mall.hlcloundposproject.utils.NumKeysUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -27,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -59,6 +61,8 @@ public class UpdateUserPwdDialog extends DialogFragment implements OnClickListen
 
 	private SQLiteDatabase userdb;
 
+	private ImageView keysIc1,keysIc2,keysIc3;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState){
@@ -72,6 +76,10 @@ public class UpdateUserPwdDialog extends DialogFragment implements OnClickListen
 		
 		ViewUtils.inject(this,view);
 		
+		keysIc1 = (ImageView) view.findViewById(R.id.icon_keys1);
+		keysIc2 = (ImageView) view.findViewById(R.id.icon_keys2);
+		keysIc3 = (ImageView) view.findViewById(R.id.icon_keys3);
+		
 		initListener();
 		
 		return view;
@@ -81,6 +89,10 @@ public class UpdateUserPwdDialog extends DialogFragment implements OnClickListen
 	private void initListener() {
 		upSureBtn.setOnClickListener(this);
 		upExitBtn.setOnClickListener(this);
+		
+		keysIc1.setOnClickListener(this);
+		keysIc2.setOnClickListener(this);
+		keysIc3.setOnClickListener(this);
 	}
 
 	/**
@@ -132,6 +144,43 @@ public class UpdateUserPwdDialog extends DialogFragment implements OnClickListen
 			case R.id.update_password_exit:
 				//取消   按钮：
 				onDestroyView();
+				break;
+				
+			case R.id.icon_keys1:
+				//弹出数字键盘
+				NumKeysUtils keyDialog = new NumKeysUtils(getActivity(), R.style.MyKeyDialogStyleTop,
+						currPwdEt, NumKeysUtils.FLOAT,
+						new NumKeysUtils.TextChangeListener() {
+							@Override
+							public void onTextChange(String value) {
+								currPwdEt.setText(value);
+							}
+						});
+				keyDialog.show();
+				break;
+			case R.id.icon_keys2:
+				//弹出数字键盘
+				NumKeysUtils keyDialog2 = new NumKeysUtils(getActivity(), R.style.MyKeyDialogStyleTop,
+						newPwdEt, NumKeysUtils.FLOAT,
+						new NumKeysUtils.TextChangeListener() {
+							@Override
+							public void onTextChange(String value) {
+								newPwdEt.setText(value);
+							}
+						});
+				keyDialog2.show();
+				break;
+			case R.id.icon_keys3:
+				//弹出数字键盘
+				NumKeysUtils keyDialog3 = new NumKeysUtils(getActivity(), R.style.MyKeyDialogStyleTop,
+						rePwdEt, NumKeysUtils.FLOAT,
+						new NumKeysUtils.TextChangeListener() {
+							@Override
+							public void onTextChange(String value) {
+								rePwdEt.setText(value);
+							}
+						});
+				keyDialog3.show();
 				break;
 		}
 	}

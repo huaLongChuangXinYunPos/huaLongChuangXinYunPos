@@ -12,6 +12,7 @@ import com.mall.hlcloundposproject.entity.User;
 import com.mall.hlcloundposproject.tasks.TaskCallBack;
 import com.mall.hlcloundposproject.tasks.TaskResult;
 import com.mall.hlcloundposproject.tasks.UserLoginTask;
+import com.mall.hlcloundposproject.utils.ExitApplicationUtils;
 import com.mall.hlcloundposproject.utils.KeyboardUtil;
 import com.mall.hlcloundposproject.utils.MyProgressDialog;
 import com.mall.hlcloundposproject.utils.MyToast;
@@ -27,6 +28,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,11 +55,11 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 	@ViewInject(R.id.login_btn_exit)
 	private Button loginExit;
 	
-	@ViewInject(R.id.keys1)
-	private ImageView keysIc1;
-	
-	@ViewInject(R.id.keys2)
-	private ImageView keysIc2;
+//	@ViewInject(R.id.keys1)
+//	private ImageView keysIc1;
+//	
+//	@ViewInject(R.id.keys2)
+//	private ImageView keysIc2;
 	
 	/**
 	 * 尝试登录时的      账户和密码值：
@@ -73,6 +75,8 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 
 		setContentView(R.layout.activity_login_in);
 		
+		ExitApplicationUtils.getInstance().addActivity(this);
+		
 		ViewUtils.inject(this);
 		
 		userHelper = new MyOpenHelper(LoginActivity.this,
@@ -84,13 +88,9 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 		loginSure.setOnClickListener(this);
 		loginExit.setOnClickListener(this);
 		
-		keysIc1.setOnClickListener(this);
-		keysIc2.setOnClickListener(this);
-		
-		
-		
-		etPassword.setOnTouchListener(this);
 		etAccount.setOnTouchListener(this);
+		etPassword.setOnTouchListener(this);
+		
 	}
 
 	//登录和取消的    单击事件：
@@ -169,21 +169,21 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 			case R.id.login_btn_exit:
 				finish();
 				break;
-				
-			case R.id.keys1:
-				etAccount.setFocusable(true);
-				etAccount.requestFocus();
-				etAccount.setInputType(InputType.TYPE_NULL);
-				new KeyboardUtil(this,getApplicationContext(),etAccount).showKeyboard();
-				
-				break;
-			case R.id.keys2:
-				etPassword.setFocusable(true);
-				etPassword.requestFocus();
-				etPassword.setInputType(InputType.TYPE_NULL);
-				new KeyboardUtil(this,getApplicationContext(),etPassword).showKeyboard();
-				
-				break;
+//				
+//			case R.id.keys1:
+//				etAccount.setFocusable(true);
+//				etAccount.requestFocus();
+//				etAccount.setInputType(InputType.TYPE_NULL);
+//				new KeyboardUtil(this,getApplicationContext(),etAccount).showKeyboard();
+//				
+//				break;
+//			case R.id.keys2:
+//				etPassword.setFocusable(true);
+//				etPassword.requestFocus();
+//				etPassword.setInputType(InputType.TYPE_NULL);
+//				new KeyboardUtil(this,getApplicationContext(),etPassword).showKeyboard();
+//				
+//				break;
 
 				
 			default:
@@ -253,34 +253,47 @@ public class LoginActivity extends Activity implements OnClickListener, TaskCall
 		finish();
 	}
 
+
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		
-		if(event.getAction() == MotionEvent.ACTION_UP){
-			
-			switch(v.getId()){
+		switch(v.getId()){
+			case R.id.password:
+				etPassword.requestFocus();
+				etPassword.setInputType(InputType.TYPE_NULL);
+				new KeyboardUtil(this,getApplicationContext(),etPassword).showKeyboard();
 				
-				case R.id.account:
-					etAccount.setInputType(InputType.TYPE_NULL);
-					etAccount.setFocusable(true);
-					etPassword.setFocusable(false);
-					etAccount.requestFocus();
-					keysIc1.setClickable(true);
-					break;
-				case R.id.password:
-					etPassword.setInputType(InputType.TYPE_NULL);
-					etPassword.setFocusable(true);
-					etAccount.setFocusable(false);
-					etPassword.requestFocus();
-					keysIc2.setClickable(true);
-					break;
+				break;
 				
+			case R.id.account:
+				etAccount.requestFocus();
+				etAccount.setInputType(InputType.TYPE_NULL);
+				new KeyboardUtil(this,getApplicationContext(),etAccount).showKeyboard();
+				
+				break;
 				default:
 					break;
-			
-			}
 		}
 		return false;
 	}
+	
+	/* 再按一次退出程序   禁用返回键 */
+	private long exitTime = 0;
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+			if ((System.currentTimeMillis() - exitTime) > 2000) {
+				MyToast.ToastIncenter(this, "再按一次退出程序").show();
+				exitTime = System.currentTimeMillis();
+			} else {
+				finish();
+				ExitApplicationUtils.getInstance().exit();
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
 
 }

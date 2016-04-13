@@ -10,6 +10,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.mall.hlcloundposproject.Configs;
 import com.mall.hlcloundposproject.R;
+import com.mall.hlcloundposproject.utils.MyToast;
+import com.mall.hlcloundposproject.utils.NumKeysUtils;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -23,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 /**
@@ -51,6 +54,8 @@ public class VipFragment extends DialogFragment implements OnClickListener {
 
 	private ProgressDialog dialog;
 	
+	private ImageView keysIc;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,6 +72,8 @@ public class VipFragment extends DialogFragment implements OnClickListener {
 		
 		ViewUtils.inject(this,view);
 		
+		keysIc = (ImageView) view.findViewById(R.id.keys_icon);
+		
 		initListener();
 		
 		return view;
@@ -78,6 +85,7 @@ public class VipFragment extends DialogFragment implements OnClickListener {
 	private void initListener() {
 		sureBtn.setOnClickListener(this);
 		exitBtn.setOnClickListener(this);
+		keysIc.setOnClickListener(this);
 	}
 
 	@Override
@@ -109,6 +117,21 @@ public class VipFragment extends DialogFragment implements OnClickListener {
 				//销毁     fragment
 				onDestroyView();
 				break;
+				
+			case R.id.keys_icon:
+				//弹出数字键盘
+				NumKeysUtils keyDialog = new NumKeysUtils(getActivity(), R.style.MyKeyDialogStyleTop,
+						etInput, NumKeysUtils.INT,
+						new NumKeysUtils.TextChangeListener() {
+							@Override
+							public void onTextChange(String value) {
+								etInput.setText(value);
+							}
+						});
+				keyDialog.show();
+				
+				break;
+				
 			default:break;
 		}
 	}
@@ -130,9 +153,9 @@ public class VipFragment extends DialogFragment implements OnClickListener {
 					int resultStatus = json.getInt("resultStatus");
 					if(resultStatus==1){
 						callback.fragmentCallback(response, Configs.VIP_FRAGMENT_QUHORITY);
-						Toast.makeText(getActivity(), "欢迎使用vip卡,已更新vip商品...", 1).show();
+						MyToast.ToastIncenter(getActivity(),  "欢迎使用vip卡,已更新vip商品...").show();
 					}else{
-						Toast.makeText(getActivity(), "当前vip号不存在,请检查是否过期...", 1).show();
+						MyToast.ToastIncenter(getActivity(), "当前vip号不存在,请检查是否过期...").show();
 					}
 					
 					dialog.dismiss();
@@ -145,7 +168,7 @@ public class VipFragment extends DialogFragment implements OnClickListener {
 			@Override
 			public void onErrorResponse(VolleyError error) {
 				dialog.dismiss();
-				Toast.makeText(getActivity(), "请检查服务器是否开启...", 1).show();
+				MyToast.ToastIncenter(getActivity(), "请检查服务器是否开启...").show();
 			}
 		});
 		

@@ -11,6 +11,9 @@ import com.mall.hlcloundposproject.adapter.QueryFragmentListAdapter;
 import com.mall.hlcloundposproject.db.MyOpenHelper;
 import com.mall.hlcloundposproject.db.OperationDbTableUtils;
 import com.mall.hlcloundposproject.entity.Goods;
+import com.mall.hlcloundposproject.utils.ExitApplicationUtils;
+import com.mall.hlcloundposproject.utils.KeyboardUtil;
+import com.mall.hlcloundposproject.utils.MyToast;
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
 
@@ -21,10 +24,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
@@ -32,13 +39,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-public class QueryGoodsActivity extends Activity implements TextWatcher, OnItemClickListener {
+public class QueryGoodsActivity extends Activity implements TextWatcher, OnItemClickListener, OnTouchListener {
 	
 	//获取  edittext:
 	@ViewInject(R.id.query_fragment_edit)
 	private EditText edittext;
 		
-	@ViewInject(R.id.query_goods_select)
+	@ViewInject(R.id.query_list)
 	private ListView listView;
 	
 	private MyOpenHelper goodsDataHelper;
@@ -60,6 +67,8 @@ public class QueryGoodsActivity extends Activity implements TextWatcher, OnItemC
 				finish();
 			}
 		});
+	    
+	    edittext.setOnTouchListener(this);
 	}
 
 	@Override
@@ -119,6 +128,22 @@ public class QueryGoodsActivity extends Activity implements TextWatcher, OnItemC
 			goodsDataDb.close();
 		}
 		super.onDestroy();
+	}
+	
+	
+	/**
+	 * 添加  键盘事件
+	 */
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		
+		if(event.getAction() == MotionEvent.ACTION_UP){
+			edittext.setInputType(InputType.TYPE_NULL);
+			new KeyboardUtil(QueryGoodsActivity.this,getApplicationContext(),edittext).showKeyboard();
+			
+			return true;
+		}
+		return false;
 	}
 	
 }

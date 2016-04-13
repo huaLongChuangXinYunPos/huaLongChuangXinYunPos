@@ -64,7 +64,7 @@
 	</LinearLayout>
 	
     
-    <LinearLayout 
+   <LinearLayout 
         android:layout_marginTop="10dp"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
@@ -84,10 +84,29 @@
 		        android:layout_height="wrap_content"
 		        android:padding="5dp"
 		        android:textSize="18sp"
+		        android:background="@null"
+		        android:singleLine="true"
 		        android:inputType="numberDecimal"
+		        android:layout_marginRight="5dp"
 		        android:hint="输入支付金额"
 	        />
+		   <ImageView 
+		       android:id="@+id/key_icon"
+				android:layout_width="wrap_content"		
+				android:layout_gravity="center_vertical"       
+				android:layout_height="wrap_content"
+				android:layout_marginRight="5dp"
+				android:background="@drawable/ic_dialog_keyboard"
+		       />
 	</LinearLayout>
+	
+    <View
+       android:layout_height="1dp"
+       android:background="@color/lowRed"
+       android:layout_width="wrap_content"
+       android:layout_marginLeft="5dp"
+       android:layout_marginRight="5dp"
+       />
     
     
      <LinearLayout 
