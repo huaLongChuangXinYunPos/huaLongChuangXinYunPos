@@ -16,9 +16,9 @@ public final class Configs {
 	public static final String APP_NAME = "hlrjPosClound";
 	
 	/**
-	 * 获取 服务器地址：
+	 * 获取 服务器地址：192.168.3.200:1238
 	 */
-	public static final String SERVER_BASE_URL = "http://192.168.3.199:1234/AppServer/";
+	public static final String SERVER_BASE_URL = "http://192.168.3.200:1238/AppServer/";
 	
 	/**
 	 * 根据    手机硬件  序列号  获取   pos机标识：
@@ -157,7 +157,7 @@ public final class Configs {
 	/**
 	 * 结算  完毕将数据发送至服务器：
 	 */
-	public static final String SELLED_DATA_TO_SERVER = "http://192.168.3.199:1234/AppPosServer.asmx/RetPosDetail";
+	public static final String SELLED_DATA_TO_SERVER = "http://192.168.3.200:1238/AppPosServer.asmx/RetPosDetail";
 	
 	
 	public static final int QUERY_ACTIVITY_RESULT_CODE = 34;
